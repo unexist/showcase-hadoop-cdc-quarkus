@@ -1,0 +1,8 @@
+= Showcase for Hadoop with CDC on Quarkus
+
+This project holds a showcase for Hadoop with CDC on Quarkus.
+
+=== Links
+
+- https://medium.com/analytics-vidhya/hadoop-single-node-cluster-on-docker-e88c3d09a256
+- https://github.com/rancavil/hadoop-single-node-cluster
