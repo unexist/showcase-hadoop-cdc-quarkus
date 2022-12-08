@@ -44,6 +44,9 @@ pd-postgres:
 pd-iceberg:
 	@podman run -dit --name iceberg --pod=$(PODNAME) debezium-iceberg:latest
 
+pd-hadoop:
+	@podman run -dit --name hadoop --pod=$(PODNAME) julienlau/hadoop-single-node-cluster:3.3.3
+
 pd-init: pd-machine-init pd-machine-start pd-pod-create pd-images-build
 
 pd-start: pd-postgres pd-hadoop pd-iceberg
@@ -51,3 +54,13 @@ pd-start: pd-postgres pd-hadoop pd-iceberg
 # Postgres
 psql:
 	PGPASSWORD=$(PG_PASS) psql -h localhost -U $(PG_USER)
+
+# Browser
+open-hadoop:
+	open http://localhost:9870
+
+open-app:
+	open http://localhost:8081
+
+open-debezium:
+	open http://localhost:8083
