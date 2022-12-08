@@ -5,3 +5,5 @@ syntax: glob
 target/
 .idea/
 .mvn/
+
+podman/debezium-server-iceberg
