@@ -42,7 +42,6 @@ pd-postgres:
 	@podman run -dit --name postgres --pod=$(PODNAME) \
 		-e POSTGRES_USER=$(PG_USER) \
 		-e POSTGRES_PASSWORD=$(PG_PASS) \
-		--entrypoint '["postgres", "-c", "wal_level=logical"]' \
 		custom-postgres:latest
 
 pd-iceberg:
