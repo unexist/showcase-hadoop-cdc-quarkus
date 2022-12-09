@@ -39,13 +39,14 @@ pd-postgres:
 	@podman run -dit --name postgres --pod=$(PODNAME) \
 		-e POSTGRES_USER=$(PG_USER) \
 		-e POSTGRES_PASSWORD=$(PG_PASS) \
+		--entrypoint '["postgres", "-c", "wal_level=logical"]' \
 		docker.io/library/postgres:14
 
 pd-iceberg:
 	@podman run -dit --name iceberg --pod=$(PODNAME) debezium-iceberg:latest
 
 pd-hadoop:
-	@podman run -dit --name hadoop --pod=$(PODNAME) julienlau/hadoop-single-node-cluster:3.3.3
+	@podman run -dit --name hadoop-single --pod=$(PODNAME) sequenceiq/hadoop-docker:2.7.0 #julienlau/hadoop-single-node-cluster:3.3.3
 
 pd-init: pd-machine-init pd-machine-start pd-pod-create pd-images-build
 
