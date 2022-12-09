@@ -31,19 +31,22 @@ pd-iceberg-build:
 	@cp iceberg/Dockerfile debezium-server-iceberg/Dockerfile
 	@cat iceberg/application.properties | sed -e "s/%%PG_USER%%/$(PG_USER)/" -e "s/%%PG_PASS%%/$(PG_PASS)/" > debezium-server-iceberg/application.properties
 
-	@podman build --format docker -t debezium-iceberg -f debezium-server-iceberg/Dockerfile
+	@podman build --format docker -t custom-debezium-iceberg -f debezium-server-iceberg/Dockerfile
 
-pd-images-build: pd-iceberg-build
+pd-postgres-build:
+	@podman build --format docker -t custom-postgres -f postgres/Dockerfile
+
+pd-build: pd-iceberg-build pd-postgres-build
 
 pd-postgres:
 	@podman run -dit --name postgres --pod=$(PODNAME) \
 		-e POSTGRES_USER=$(PG_USER) \
 		-e POSTGRES_PASSWORD=$(PG_PASS) \
 		--entrypoint '["postgres", "-c", "wal_level=logical"]' \
-		docker.io/library/postgres:14
+		custom-postgres:latest
 
 pd-iceberg:
-	@podman run -dit --name iceberg --pod=$(PODNAME) debezium-iceberg:latest
+	@podman run -dit --name iceberg --pod=$(PODNAME) custom-debezium-iceberg:latest
 
 pd-hadoop:
 	@podman run -dit --name hadoop-single --pod=$(PODNAME) sequenceiq/hadoop-docker:2.7.0 #julienlau/hadoop-single-node-cluster:3.3.3
