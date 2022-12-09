@@ -11,3 +11,4 @@ This project holds a showcase for Hadoop with CDC on Quarkus.
 - https://github.com/memiiso/debezium-server-iceberg
 - https://debezium.io/blog/2021/10/20/using-debezium-create-data-lake-with-apache-iceberg/
 - https://iceberg.apache.org/
+- https://hadoop.apache.org/docs/r1.0.4/webhdfs.html#FsURIvsHTTP_URL
