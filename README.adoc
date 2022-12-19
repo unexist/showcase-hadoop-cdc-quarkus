@@ -7,6 +7,7 @@ This project holds a showcase for Hadoop with CDC on Quarkus.
 - https://medium.com/analytics-vidhya/hadoop-single-node-cluster-on-docker-e88c3d09a256
 - https://github.com/rancavil/hadoop-single-node-cluster
 - https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html
+- https://www.edureka.co/blog/install-hadoop-single-node-hadoop-cluster
 
 - https://hub.docker.com/r/debezium/server
 - https://debezium.io/documentation/reference/stable/operations/debezium-server.html
