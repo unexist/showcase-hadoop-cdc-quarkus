@@ -36,7 +36,10 @@ pd-iceberg-build:
 pd-postgres-build:
 	@podman build --format docker -t custom-postgres -f postgres/Dockerfile
 
-pd-build: pd-iceberg-build pd-postgres-build
+pd-hadoop-build:
+	@podman build --format docker -t custom-hadoop -f hadoop/Dockerfile
+
+pd-build: pd-iceberg-build pd-postgres-build pd-hadoop-build
 
 pd-postgres:
 	@podman run -dit --name postgres --pod=$(PODNAME) \
@@ -48,7 +51,7 @@ pd-iceberg:
 	@podman run -dit --name iceberg --pod=$(PODNAME) custom-debezium-iceberg:latest
 
 pd-hadoop:
-	@podman run -dit --name hadoop-single --pod=$(PODNAME) sequenceiq/hadoop-docker:2.7.0 #julienlau/hadoop-single-node-cluster:3.3.3
+	@podman run -dit --name hadoop-single --pod=$(PODNAME) custom-hadoop:latest
 
 pd-init: pd-machine-init pd-machine-start pd-pod-create pd-images-build
 
