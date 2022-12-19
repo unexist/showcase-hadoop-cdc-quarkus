@@ -1,29 +1,29 @@
-#!/bin/bash
+#!/bin/sh
 set -e
-sudo service ssh start
+doas rc-service sshd start
 
 if [ ! -d "/tmp/hadoop-hduser/dfs/name" ]; then
-    $HADOOP_HOME/bin/hdfs namenode -format && echo "OK : HDFS namenode format operation finished successfully !"
+    ${HADOOP_HOME}/bin/hdfs namenode -format && echo "OK : HDFS namenode format operation finished successfully !"
 fi
 
-$HADOOP_HOME/sbin/start-dfs.sh
+${HADOOP_HOME}/sbin/start-dfs.sh
 
 echo "YARNSTART = $YARNSTART"
 
 if [[ -z $YARNSTART || $YARNSTART -ne 0 ]]; then
     echo "Running start-yarn.sh"
 
-    $HADOOP_HOME/sbin/start-yarn.sh
+    ${HADOOP_HOME}/sbin/start-yarn.sh
 fi
 
-$HADOOP_HOME/bin/hdfs dfs -mkdir /tmp
-$HADOOP_HOME/bin/hdfs dfs -mkdir /users
-$HADOOP_HOME/bin/hdfs dfs -mkdir /jars
-$HADOOP_HOME/bin/hdfs dfs -chmod 777 /tmp
-$HADOOP_HOME/bin/hdfs dfs -chmod 777 /users
-$HADOOP_HOME/bin/hdfs dfs -chmod 777 /jars
+${HADOOP_HOME}/bin/hdfs dfs -mkdir /tmp
+${HADOOP_HOME}/bin/hdfs dfs -mkdir /users
+${HADOOP_HOME}/bin/hdfs dfs -mkdir /jars
+${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /tmp
+${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /users
+${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /jars
 
-$HADOOP_HOME/bin/hdfs dfsadmin -safemode leave
+${HADOOP_HOME}/bin/hdfs dfsadmin -safemode leave
 
 # Keep the container running indefinitely
-tail -f $HADOOP_HOME/logs/hadoop-*-namenode-*.log
+tail -f ${HADOOP_HOME}/logs/hadoop-*-namenode-*.log
