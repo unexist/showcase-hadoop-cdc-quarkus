@@ -1,21 +1,40 @@
-#!/bin/sh
+#!/bin/bash
 set -e
-doas rc-service sshd start
 
-if [ ! -d "/tmp/hadoop-hduser/dfs/name" ]; then
-    ${HADOOP_HOME}/bin/hdfs namenode -format && echo "OK : HDFS namenode format operation finished successfully !"
+if [ ! -f "/etc/ssh/ssh_host_rsa_key" ]; then
+  # Generate fresh RSA key
+  doas ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N "" -t rsa
+fi
+if [ ! -f "/etc/ssh/ssh_host_dsa_key" ]; then
+  # Generate fresh DSA key
+  doas ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N "" -t dsa
 fi
 
+echo "Start sshd"
+doas /usr/sbin/sshd -D >/dev/null &
+
+if [[ -z ${FORMATNODES} || ${FORMATNODES} -ne 0 ]]; then
+  echo "Format namenode"
+  ${HADOOP_HOME}/bin/hdfs namenode -format && echo "Format namenode: OK"
+
+  echo "Format secondarynamenode"
+  ${HADOOP_HOME}/bin/hdfs secondarynamenode -format -checkpoint force && echo "Format secondarynamenode: OK"
+
+  echo "Format datanode"
+  ${HADOOP_HOME}/bin/hdfs datanode -format && echo "Format datanode: OK"
+fi
+
+echo "Start dfs nodes"
 ${HADOOP_HOME}/sbin/start-dfs.sh
 
 echo "YARNSTART = $YARNSTART"
 
-if [[ -z $YARNSTART || $YARNSTART -ne 0 ]]; then
-    echo "Running start-yarn.sh"
-
+if [[ -z ${YARNSTART} || ${YARNSTART} -ne 0 ]]; then
+    echo "Start yarn"
     ${HADOOP_HOME}/sbin/start-yarn.sh
 fi
 
+# Setup
 ${HADOOP_HOME}/bin/hdfs dfs -mkdir /tmp
 ${HADOOP_HOME}/bin/hdfs dfs -mkdir /users
 ${HADOOP_HOME}/bin/hdfs dfs -mkdir /jars
