@@ -4,20 +4,20 @@ PG_USER := postgres
 PG_PASS := postgres
 
 pd-machine-init:
-	@podman machine init --memory=8192 --cpus=2 --disk-size=20
+	@podman machine init --memory=16384 --cpus=4 --disk-size=100
 
 pd-machine-start:
 	@podman machine start
 
 pd-machine-rm:
-	@podman machine rm
+	@podman machine rm -f
 
 pd-machine-recreate: pd-machine-rm pd-machine-init pd-machine-start
 
 pd-pod-create:
 	@podman pod create -n $(PODNAME) --network bridge \
 		-p 5432:5432 \
-		-p 9864:9864 -p9868:9868 -p 9870:9870 -p 8088:8088 -p 9000:9000 -p 50070:50070 \
+		-p 9864:9864 -p 9866:9866 -p 9868:9868 -p 9870:9870 -p 8088:8088 -p 9000:9000 -p 50070:50070 \
 		-p 8083:8083 \
 		-p 8081:8081
 
@@ -63,7 +63,7 @@ psql:
 
 # Browser
 open-hadoop:
-	open http://localhost:50070
+	open http://localhost:9000
 
 open-app:
 	open http://localhost:8081
