@@ -30,6 +30,7 @@ ENV YARN_RESOURCEMANAGER_USER="${HADOOP_USER}"
 ENV YARN_NODEMANAGER_USER="${HADOOP_USER}"
 
 RUN echo "export JAVA_HOME=/opt/java/openjdk/" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh
+RUN echo "export HADOOP_OPTS='-Ddfs.namenode.name.dir=file://${HADOOP_HOME}/hdfs/name -Ddfs.datanode.name.dir=file://${HADOOP_HOME}/hdfs/data'" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh
 
 COPY core-site.xml ${HADOOP_HOME}/etc/hadoop/
 COPY hdfs-site.xml ${HADOOP_HOME}/etc/hadoop/
