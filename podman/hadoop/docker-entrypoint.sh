@@ -19,10 +19,13 @@ if [[ -z ${FORMATNODES} || ${FORMATNODES} -ne 0 ]]; then
 
   echo "Format secondarynamenode"
   ${HADOOP_HOME}/bin/hdfs secondarynamenode -format -checkpoint force && echo "Format secondarynamenode: OK"
-
-  echo "Format datanode"
-  ${HADOOP_HOME}/bin/hdfs datanode -format && echo "Format datanode: OK"
 fi
+
+# Create paths
+mkdir -p ${HADOOP_HOME}/hdfs/name
+mkdir -p ${HADOOP_HOME}/hdfs/data
+mkdir -p ${HADOOP_HOME}/logs
+chmod -R 755 ${HADOOP_HOME}/hdfs/
 
 echo "Start dfs nodes"
 ${HADOOP_HOME}/sbin/start-dfs.sh
@@ -34,7 +37,7 @@ if [[ -z ${YARNSTART} || ${YARNSTART} -ne 0 ]]; then
     ${HADOOP_HOME}/sbin/start-yarn.sh
 fi
 
-# Setup
+# Setup FS
 ${HADOOP_HOME}/bin/hdfs dfs -mkdir /tmp
 ${HADOOP_HOME}/bin/hdfs dfs -mkdir /users
 ${HADOOP_HOME}/bin/hdfs dfs -mkdir /jars
