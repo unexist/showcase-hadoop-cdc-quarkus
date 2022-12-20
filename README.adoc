@@ -4,10 +4,16 @@ This project holds a showcase for Hadoop with CDC on Quarkus.
 
 == Links
 
+=== Hadoop
+
 - https://medium.com/analytics-vidhya/hadoop-single-node-cluster-on-docker-e88c3d09a256
 - https://github.com/rancavil/hadoop-single-node-cluster
 - https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html
 - https://www.edureka.co/blog/install-hadoop-single-node-hadoop-cluster
+- https://stackoverflow.com/questions/41266403/how-to-access-hadoop-web-ui-in-linux
+- https://www.digitalocean.com/community/tutorials/how-to-install-hadoop-in-stand-alone-mode-on-ubuntu-20-04
+
+=== Debezium
 
 - https://hub.docker.com/r/debezium/server
 - https://debezium.io/documentation/reference/stable/operations/debezium-server.html
