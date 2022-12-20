@@ -17,7 +17,7 @@ pd-machine-recreate: pd-machine-rm pd-machine-init pd-machine-start
 pd-pod-create:
 	@podman pod create -n $(PODNAME) --network bridge \
 		-p 5432:5432 \
-		-p 9864:9864 -p 9870:9870 -p 8088:8088 -p 9000:9000 \
+		-p 9864:9864 -p9868:9868 -p 9870:9870 -p 8088:8088 -p 9000:9000 -p 50070:50070 \
 		-p 8083:8083 \
 		-p 8081:8081
 
@@ -63,7 +63,7 @@ psql:
 
 # Browser
 open-hadoop:
-	open http://localhost:9870
+	open http://localhost:50070
 
 open-app:
 	open http://localhost:8081
