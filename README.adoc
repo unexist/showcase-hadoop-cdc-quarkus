@@ -4,7 +4,8 @@ This project holds a showcase for Hadoop with CDC on Quarkus.
 
 == Problems
 
-Apparently the datanodes use C-libraries which I couldn't get not to core dump in alpine.
+Apparently the datanodes use compoents like C-libraries which I couldn't get not to core dump in
+Alpine/Musl.
 
 == Links
 
