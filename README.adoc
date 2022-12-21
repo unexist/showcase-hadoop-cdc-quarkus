@@ -2,6 +2,19 @@
 
 This project holds a showcase for Hadoop with CDC on Quarkus.
 
+== Problems
+
+Apparently I cannot start the datanode in Hadoop >=3.0.0:
+
+- *2.8.1* Starts fine
+- *2.9.2* Starts fine
+- *3.0.0* Exception <a 'java/lang/ClassNotFoundException': org/apache/commons/configuration2/BaseConfigurationBeanInfo> (0x000000076dd6d438) thrown at [/home/adoptopenjdk/workspace/build-scripts/jobs/jdk8u/jdk8u-alpine-linux-x64-temurin/workspace/build/src/hotspot/
+- *3.1.0* Exception <a 'java/lang/ClassNotFoundException': org/apache/commons/configuration2/BaseConfigurationBeanInfo> (0x000000076dd02590) thrown at [/home/adoptopenjdk/workspace/build-scripts/jobs/jdk8u/jdk8u-alpine-linux-x64-temurin/workspace/build/src/hotspot/
+- *3.2.0* Exception <a 'java/lang/ClassNotFoundException': org/apache/log4j/WriterAppenderCustomizer> (0x000000076de89748) thrown at [/home/adoptopenjdk/workspace/build-scripts/jobs/jdk8u/jdk8u-alpine-linux-x64-temurin/workspace/build/src/hotspot/src/share/vm/class
+- *3.3.0* Exception <a 'java/lang/ClassNotFoundException': org/apache/log4j/RollingFileAppenderCustomizer> (0x000000076e2246b8) thrown at [/home/adoptopenjdk/workspace/build-scripts/jobs/jdk8u/jdk8u-alpine-linux-x64-temurin/workspace/build/src/hotspot/src/share/vm/
+- *3.3.4* Exception <a 'java/lang/ClassNotFoundException': org/apache/log4j/WriterAppenderCustomizer> (0x000000076e45ab38) thrown at [/home/adoptopenjdk/workspace/build-scripts/jobs/jdk8u/jdk8u-alpine-linux-x64-temurin/workspace/build/src/hotspot/src/share/vm/class
+
+
 == Links
 
 === Hadoop
