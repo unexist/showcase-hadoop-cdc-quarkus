@@ -20,7 +20,7 @@ RUN ssh-keygen -t rsa -P "" -f ~/.ssh/id_rsa \
     && chmod 0600 ~/.ssh/authorized_keys
 
 ENV HADOOP_USER="hduser"
-ENV HADOOP_VERSION="3.3.0"
+ENV HADOOP_VERSION="2.9.2"
 ENV HADOOP_HOME="/home/${HADOOP_USER}/hadoop-${HADOOP_VERSION}"
 ENV PATH="${PATH}:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin"
 
