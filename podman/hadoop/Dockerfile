@@ -28,6 +28,10 @@ RUN curl -sL --retry 3 "http://archive.apache.org/dist/hadoop/common/hadoop-${HA
     | tar -xz -C /home/${HADOOP_USER}/ \
     && rm -rf ${HADOOP_HOME}/share/doc
 
+# Fix missing library
+#RUN curl -sL --retry 3 "https://repo1.maven.org/maven2/log4j/apache-log4j-extras/1.2.17/apache-log4j-extras-1.2.17.jar" \
+#    -o ${HADOOP_HOME}/share/hadoop/common/lib/apache-log4j-extras-1.2.17.jar
+
 ENV HDFS_NAMENODE_USER="${HADOOP_USER}"
 ENV HDFS_DATANODE_USER="${HADOOP_USER}"
 ENV HDFS_SECONDARYNAMENODE_USER="${HADOOP_USER}"
