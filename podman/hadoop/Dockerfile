@@ -1,16 +1,17 @@
-FROM eclipse-temurin:8-jdk-alpine
+FROM eclipse-temurin:8-jdk
 
-RUN apk add curl openssh bash doas
+RUN apt-get -o Acquire::Max-FutureTime=86400 update -y \
+    && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get install -y --no-install-recommends doas curl ssh \
+    && apt-get clean
 
-RUN adduser hduser -G wheel; \
-    echo "hduser:hduser" | chpasswd; \
-    echo "permit nopass :wheel" > /etc/doas.d/doas.conf
+RUN groupadd wheel \
+    && useradd -m hduser -G wheel \
+    && echo "hduser:hduser" | chpasswd \
+    && echo "permit nopass :wheel" > /etc/doas.conf
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 COPY ssh_config /etc/ssh/ssh_config
-
-RUN ssh-keygen -f /etc/ssh/ssh_host_rsa_key -N "" -t rsa \
-    && ssh-keygen -f /etc/ssh/ssh_host_dsa_key -N "" -t dsa
 
 WORKDIR /home/hduser
 USER hduser
@@ -20,17 +21,13 @@ RUN ssh-keygen -t rsa -P "" -f ~/.ssh/id_rsa \
     && chmod 0600 ~/.ssh/authorized_keys
 
 ENV HADOOP_USER="hduser"
-ENV HADOOP_VERSION="2.9.2"
+ENV HADOOP_VERSION="3.3.4"
 ENV HADOOP_HOME="/home/${HADOOP_USER}/hadoop-${HADOOP_VERSION}"
 ENV PATH="${PATH}:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin"
 
 RUN curl -sL --retry 3 "http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz" \
     | tar -xz -C /home/${HADOOP_USER}/ \
     && rm -rf ${HADOOP_HOME}/share/doc
-
-# Fix missing library
-#RUN curl -sL --retry 3 "https://repo1.maven.org/maven2/log4j/apache-log4j-extras/1.2.17/apache-log4j-extras-1.2.17.jar" \
-#    -o ${HADOOP_HOME}/share/hadoop/common/lib/apache-log4j-extras-1.2.17.jar
 
 ENV HDFS_NAMENODE_USER="${HADOOP_USER}"
 ENV HDFS_DATANODE_USER="${HADOOP_USER}"

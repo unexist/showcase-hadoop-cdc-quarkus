@@ -2,7 +2,7 @@
 set -e
 
 echo "Starting sshd"
-doas /usr/sbin/sshd -D >/dev/null &
+doas service ssh start
 
 # Format namenodes
 if [[ -z ${FORMATNODES} || ${FORMATNODES} -ne 0 ]]; then
