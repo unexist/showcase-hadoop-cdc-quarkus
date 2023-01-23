@@ -63,7 +63,7 @@ psql:
 
 # Browser
 open-hadoop:
-	open http://localhost:9000
+	open http://localhost:9870
 
 open-app:
 	open http://localhost:8081
