@@ -61,6 +61,11 @@ pd-start: pd-postgres pd-hadoop pd-iceberg
 psql:
 	PGPASSWORD=$(PG_PASS) psql -h localhost -U $(PG_USER)
 
+# Iceberg
+iceberg:
+	#cp iceberg/application.properties debezium-server-iceberg/debezium-server-iceberg-dist/target/debezium-server-iceberg/conf/
+	debezium-server-iceberg/debezium-server-iceberg-dist/target/debezium-server-iceberg/run.sh
+
 # Browser
 open-hadoop:
 	open http://localhost:9870
