@@ -1,5 +1,5 @@
 FROM eclipse-temurin:11-jdk as builder
-RUN apt-get -qq update && apt-get -qq install maven unzip
+RUN apt-get -qq update -o Acquire::Max-FutureTime=86400 && apt-get -qq install maven unzip
 COPY . /app
 WORKDIR /app
 RUN mvn clean package -Passembly -Dmaven.test.skip
