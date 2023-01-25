@@ -1,3 +1,6 @@
+PG_USER := postgres
+PG_PASS := postgres
+
 define JSON_TODO
 curl -X 'POST' \
   'http://localhost:8080/todo' \
@@ -18,3 +21,20 @@ export JSON_TODO
 # Tools
 todo:
 	@echo $$JSON_TODO | bash
+
+list:
+	@curl -X "GET" "http://localhost:8080/todo" -H 'accept: */*' | jq .
+
+
+psql:
+	PGPASSWORD=$(PG_PASS) psql -h localhost -U $(PG_USER)
+
+# Browser
+open-hadoop:
+	open http://localhost:9870
+
+open-app:
+	open http://localhost:8081
+
+open-debezium:
+	open http://localhost:8083

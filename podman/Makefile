@@ -57,21 +57,7 @@ pd-init: pd-machine-init pd-machine-start pd-pod-create pd-images-build
 
 pd-start: pd-postgres pd-hadoop pd-iceberg
 
-# Postgres
-psql:
-	PGPASSWORD=$(PG_PASS) psql -h localhost -U $(PG_USER)
-
 # Iceberg
 iceberg:
 	#cp iceberg/application.properties debezium-server-iceberg/debezium-server-iceberg-dist/target/debezium-server-iceberg/conf/
 	debezium-server-iceberg/debezium-server-iceberg-dist/target/debezium-server-iceberg/run.sh
-
-# Browser
-open-hadoop:
-	open http://localhost:9870
-
-open-app:
-	open http://localhost:8081
-
-open-debezium:
-	open http://localhost:8083
