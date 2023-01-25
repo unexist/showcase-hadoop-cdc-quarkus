@@ -19,13 +19,6 @@
 
     <dependencies>
 
-        <!-- Debezium -->
-        <dependency>
-            <groupId>io.debezium</groupId>
-            <artifactId>debezium-quarkus-outbox</artifactId>
-            <version>${debezium-quarkus-outbox.version}</version>
-        </dependency>
-
         <!-- Database -->
         <dependency>
             <groupId>io.quarkus</groupId>
@@ -38,10 +31,6 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-devservices-postgresql</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>connect-json</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -11,16 +11,12 @@
 
 package dev.unexist.showcase.todo.domain.todo;
 
-import dev.unexist.showcase.todo.infrastructure.outbox.TodoCreatedEvent;
-import io.debezium.outbox.quarkus.ExportedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,9 +26,6 @@ public class TodoService {
 
     @Inject
     TodoRepository todoRepository;
-
-    @Inject
-    Event<ExportedEvent<?, ?>> eventHandler;
 
     /**
      * Create new {@link Todo} entry and store it in repository
@@ -47,8 +40,6 @@ public class TodoService {
         Todo todo = new Todo(base);
 
         boolean retval = this.todoRepository.add(todo);
-
-        this.eventHandler.fire(new TodoCreatedEvent(Instant.now(), todo));
 
         return retval ? todo.getId() : -1;
     }
