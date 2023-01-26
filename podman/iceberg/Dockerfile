@@ -1,4 +1,7 @@
 FROM eclipse-temurin:11-jdk as builder
+
+MAINTAINER Christoph Kappel <christoph@unexist.dev>
+
 RUN apt-get -qq update -o Acquire::Max-FutureTime=86400 && apt-get -qq install maven unzip
 COPY . /app
 WORKDIR /app
