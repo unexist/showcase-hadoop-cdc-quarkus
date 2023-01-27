@@ -50,4 +50,6 @@ fi
 ${HADOOP_HOME}/bin/hdfs dfsadmin -safemode leave
 
 # Keep the container running indefinitely
-tail -f ${HADOOP_HOME}/logs/hadoop-*-namenode-*.log
+#tail -f ${HADOOP_HOME}/logs/hadoop-*-namenode-*.log
+
+${HIVE_HOME}/bin/hiveserver2

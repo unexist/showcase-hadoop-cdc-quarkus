@@ -35,7 +35,7 @@ ENV HDFS_SECONDARYNAMENODE_USER="${HADOOP_USER}"
 ENV YARN_RESOURCEMANAGER_USER="${HADOOP_USER}"
 ENV YARN_NODEMANAGER_USER="${HADOOP_USER}"
 
-ENV PATH="${PATH}:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin"
+ENV PATH="${PATH}:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${HIVE_HOME}/bin"
 
 # Download and install Hadoop
 RUN curl -sL --retry 3 "http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz" \
