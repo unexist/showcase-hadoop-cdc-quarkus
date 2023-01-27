@@ -17,7 +17,7 @@ pd-machine-recreate: pd-machine-rm pd-machine-init pd-machine-start
 pd-pod-create:
 	@podman pod create -n $(PODNAME) --network bridge \
 		-p 5432:5432 \
-		-p 9864:9864 -p 9866:9866 -p 9868:9868 -p 9870:9870 -p 8088:8088 -p 9000:9000 -p 50070:50070 \
+		-p 9864:9864 -p 9866:9866 -p 9868:9868 -p 9870:9870 -p 8088:8088 -p 9000:9000 -p 10000:10000 -p 50070:50070 \
 		-p 8083:8083 \
 		-p 8081:8081
 
@@ -39,7 +39,10 @@ pd-postgres-build:
 pd-hadoop-build:
 	@podman build --format docker -t custom-hadoop -f hadoop/Dockerfile
 
-pd-build: pd-iceberg-build pd-postgres-build pd-hadoop-build
+pd-hadoop-hive-build:
+	@podman build --format docker -t custom-hadoop-hive -f hadoop_hive/Dockerfile
+
+pd-build: pd-iceberg-build pd-postgres-build pd-hadoop-build pd-hadoop-hive-build
 
 pd-postgres:
 	@podman run -dit --name postgres --pod=$(PODNAME) \
@@ -53,9 +56,12 @@ pd-iceberg:
 pd-hadoop:
 	@podman run -dit --name hadoop-single --pod=$(PODNAME) custom-hadoop:latest
 
+pd-hadoop-hive:
+	@podman run -dit --name hadoop-hive-single --pod=$(PODNAME) custom-hadoop-hive:latest
+
 pd-init: pd-machine-init pd-machine-start pd-pod-create pd-images-build
 
-pd-start: pd-postgres pd-hadoop pd-iceberg
+pd-start: pd-postgres pd-hadoop-hive pd-iceberg
 
 # Iceberg
 iceberg:
