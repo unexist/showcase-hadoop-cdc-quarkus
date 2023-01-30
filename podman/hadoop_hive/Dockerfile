@@ -68,8 +68,11 @@ RUN echo "export JAVA_HOME=/opt/java/openjdk/" >> ${HIVE_HOME}/conf/hive-env.sh 
     && echo "export HADOOP_HOME='${HADOOP_HOME}'" >> ${HIVE_HOME}/conf/hive-env.sh \
     && echo "export HIVE_CONF_DIR='${HIVE_HOME}/conf'" >> ${HIVE_HOME}/conf/hive-env.sh
 
-#EXPOSE 8088 9000 9870 10000
 EXPOSE 50070 50075 50010 50020 50090 8020 9000 9864 9870 10000 10020 19888 8088 8030 8031 8032 8033 8040 8042 22
+# 9088 = 9000 = 9083 =
+# 9864 = Hadoop webhfs, 9870 = Hadoop, 9999 = Hive Metastore UI, 10000 = Hive Thrift,
+# 50010 = Datanode transfer, 50020 = Datanode IPC, 50075  = Datanode UI
+#EXPOSE 8088 9000 9083 9864 9870 9999 10000 50010 50020 50075
 
 # FORMATNODES=0 will prevent formatter
 ENV FORMATNODES=1
