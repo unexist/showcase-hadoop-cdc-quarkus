@@ -17,6 +17,7 @@ Alpine/Musl.
 - https://www.edureka.co/blog/install-hadoop-single-node-hadoop-cluster
 - https://stackoverflow.com/questions/41266403/how-to-access-hadoop-web-ui-in-linux
 - https://www.digitalocean.com/community/tutorials/how-to-install-hadoop-in-stand-alone-mode-on-ubuntu-20-04
+- https://www.ibm.com/docs/el/db2-big-sql/5.0?topic=applications-impersonation-in-big-sql
 
 === Debezium
 
