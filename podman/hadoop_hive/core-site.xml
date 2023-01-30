@@ -20,12 +20,14 @@
         <name>fs.defaultFS</name>
         <value>hdfs://0.0.0.0:9000</value>
     </property>
+
+    <!-- Allow impersonation for user hduser -->
     <property>
-        <name>hadoop.proxyuser.hadoop.hosts</name>
+        <name>hadoop.proxyuser.hduser.hosts</name>
         <value>*</value>
     </property>
     <property>
-        <name>hadoop.proxyuser.hadoop.groups</name>
+        <name>hadoop.proxyuser.hduser.groups</name>
         <value>*</value>
     </property>
 </configuration>
