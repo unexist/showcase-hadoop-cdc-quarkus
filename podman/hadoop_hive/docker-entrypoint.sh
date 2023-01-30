@@ -32,11 +32,14 @@ else
     echo "Not starting historyserver"
 fi
 
-# Setup FS
+# Setup FS/Hive
 if [[ -z ${FORMATNODES} || ${FORMATNODES} -ne 0 ]]; then
+    echo "Creating directories"
     ${HADOOP_HOME}/bin/hdfs dfs -mkdir /tmp
     ${HADOOP_HOME}/bin/hdfs dfs -mkdir /users
     ${HADOOP_HOME}/bin/hdfs dfs -mkdir /jars
+    ${HADOOP_HOME}/bin/hdfs dfs -mkdir /user
+    ${HADOOP_HOME}/bin/hdfs dfs -mkdir /user/hive
     ${HADOOP_HOME}/bin/hdfs dfs -mkdir /user/hive/warehouse
 
     ${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /tmp
@@ -44,7 +47,10 @@ if [[ -z ${FORMATNODES} || ${FORMATNODES} -ne 0 ]]; then
     ${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /jars
     ${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /user/hive/warehouse
 
+    echo "Creating schema"
     ${HIVE_HOME}/bin/schematool -initSchema -dbType derby
+else
+    echo "Not creating directories and schema"
 fi
 
 ${HADOOP_HOME}/bin/hdfs dfsadmin -safemode leave
