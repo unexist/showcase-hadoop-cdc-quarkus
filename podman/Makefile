@@ -17,9 +17,7 @@ pd-machine-recreate: pd-machine-rm pd-machine-init pd-machine-start
 pd-pod-create:
 	@podman pod create -n $(PODNAME) --network bridge \
 		-p 5432:5432 \
-		-p 9864:9864 -p 9866:9866 -p 9868:9868 -p 9870:9870 -p 8088:8088 -p 9000:9000 -p 10000:10000 -p 50070:50070 \
-		-p 8083:8083 \
-		-p 8081:8081
+		-p 8088:8088 -p 9000:9000 -p 9083:9083 -p 9864:9864 -p 9870:9870 -p 9999:9999 -p 10000:10000 -p 50010:50010 -p 50020:50020 -p 50075:50075
 
 pd-pod-rm:
 	@podman pod rm -f $(PODNAME)

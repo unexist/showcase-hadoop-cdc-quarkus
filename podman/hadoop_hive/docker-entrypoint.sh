@@ -38,14 +38,14 @@ if [[ -z ${FORMATNODES} || ${FORMATNODES} -ne 0 ]]; then
     ${HADOOP_HOME}/bin/hdfs dfs -mkdir /tmp
     ${HADOOP_HOME}/bin/hdfs dfs -mkdir /users
     ${HADOOP_HOME}/bin/hdfs dfs -mkdir /jars
-    ${HADOOP_HOME}/bin/hdfs dfs -mkdir /user
-    ${HADOOP_HOME}/bin/hdfs dfs -mkdir /user/hive
-    ${HADOOP_HOME}/bin/hdfs dfs -mkdir /user/hive/warehouse
+    ${HADOOP_HOME}/bin/hdfs dfs -mkdir /warehouse
+    ${HADOOP_HOME}/bin/hdfs dfs -mkdir /warehouse/hive
 
     ${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /tmp
     ${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /users
     ${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /jars
-    ${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /user/hive/warehouse
+    ${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /warehouse
+    ${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /warehouse/hive
 
     echo "Creating schema"
     ${HIVE_HOME}/bin/schematool -initSchema -dbType derby
