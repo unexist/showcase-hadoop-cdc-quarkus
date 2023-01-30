@@ -59,7 +59,8 @@ RUN mkdir -p ${HADOOP_HOME}/hdfs/namenode \
 # Download and install Hive
 RUN curl -sL --retry 3 "https://www-eu.apache.org/dist/hive/hive-${HIVE_VERSION}/apache-hive-${HIVE_VERSION}-bin.tar.gz" \
     | tar -xz -C /home/${HADOOP_USER}/ \
-    && mv apache-hive-${HIVE_VERSION}-bin hive-${VERSION}
+    && mv /home/${HADOOP_USER}/apache-hive-${HIVE_VERSION}-bin ${HIVE_HOME} \
+    && ln -s ${HIVE_HOME} /home/${HADOOP_USER}/hive
 
 COPY hive-site.xml ${HIVE_HOME}/conf/hive-site.xml
 
