@@ -25,4 +25,9 @@
         <name>dfs.permissions</name>
         <value>false</value>
     </property>
+
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>file://home/hduser/hadoop-3.3.4/hdfs/datanode</value>
+    </property>
 </configuration>

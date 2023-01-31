@@ -29,12 +29,6 @@ ENV HADOOP_HOME="/home/${HADOOP_USER}/hadoop-${HADOOP_VERSION}"
 ENV HIVE_VERSION="3.1.3"
 ENV HIVE_HOME="/home/${HADOOP_USER}/hive-${HIVE_VERSION}"
 
-ENV HDFS_NAMENODE_USER="${HADOOP_USER}"
-ENV HDFS_DATANODE_USER="${HADOOP_USER}"
-ENV HDFS_SECONDARYNAMENODE_USER="${HADOOP_USER}"
-ENV YARN_RESOURCEMANAGER_USER="${HADOOP_USER}"
-ENV YARN_NODEMANAGER_USER="${HADOOP_USER}"
-
 ENV PATH="${PATH}:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${HIVE_HOME}/bin"
 
 # Download and install Hadoop
@@ -47,8 +41,15 @@ COPY hdfs-site.xml ${HADOOP_HOME}/etc/hadoop/
 COPY yarn-site.xml ${HADOOP_HOME}/etc/hadoop/
 COPY mapred-site.xml ${HADOOP_HOME}/etc/hadoop/
 
-RUN echo "export JAVA_HOME=/opt/java/openjdk/" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
-    && echo "export HADOOP_OPTS='-Ddfs.namenode.name.dir=file://${HADOOP_HOME}/hdfs/namenode -Ddfs.datanode.name.dir=file://${HADOOP_HOME}/hdfs/datanode'" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh
+# Set options based on variables
+RUN echo "export JAVA_HOME=\"/opt/java/openjdk/\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
+    && echo "export HDFS_NAMENODE_USER=\"${HADOOP_USER}\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
+    && echo "export HDFS_DATANODE_USER=\"${HADOOP_USER}\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
+    && echo "export HDFS_SECONDARYNAMENODE_USER=\"${HADOOP_USER}\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
+    && echo "export YARN_RESOURCEMANAGER_USER=\"${HADOOP_USER}\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
+    && echo "export YARN_NODEMANAGER_USER=\"${HADOOP_USER}\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
+    && echo "export HDFS_NAMENODE_OPTS=\"${HDFS_NAMENODE_OPTS} -Ddfs.namenode.name.dir=file://${HADOOP_HOME}/hdfs/namenode\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
+    && echo "export HDFS_DATANODE_OPTS=\"${HDFS_DATANODE_OPTS} -Ddfs.datanode.data.dir=file://${HADOOP_HOME}/hdfs/datanode\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh
 
 # Create paths
 RUN mkdir -p ${HADOOP_HOME}/hdfs/namenode \
