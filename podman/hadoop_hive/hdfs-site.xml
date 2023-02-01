@@ -42,6 +42,21 @@
     </property>
 
     <property>
+        <name>dfs.datanode.address</name>
+        <value>localhost:9866</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.http.address</name>
+        <value>localhost:9864</value>
+    </property>
+
+    <property>
+        <name>dfs.datanode.ipc.address</name>
+        <value>localhost:9867</value>
+    </property>
+
+    <property>
         <name>dfs.datanode.hostname</name>
         <value>localhost</value>
     </property>

@@ -18,7 +18,8 @@
 <configuration>
     <property>
         <name>fs.defaultFS</name>
-        <value>hdfs://0.0.0.0:9000</value>
+        <!-- Set to localhost, otherwise adress resolution of the datanode is wrong -->
+        <value>hdfs://localhost:9000</value>
     </property>
 
     <!-- Allow impersonation for user hduser -->
