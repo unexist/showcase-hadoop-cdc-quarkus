@@ -37,6 +37,15 @@
     </property>
 
     <property>
+        <name>dfs.client.use.datanode.hostname</name>
+        <value>false</value>
+        <description>
+            Whether clients should use datanode hostnames when connecting to datanodes.
+        </description>
+    </property>
+
+    <!-- Namenode -->
+    <property>
         <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
         <value>false</value>
         <description>
@@ -49,19 +58,11 @@
         </description>
     </property>
 
-    <property>
-        <name>dfs.client.use.datanode.hostname</name>
-        <value>true</value>
-        <description>
-            Whether clients should use datanode hostnames when connecting to datanodes.
-        </description>
-    </property>
-
     <!-- Datanode -->
 
     <property>
         <name>dfs.datanode.use.datanode.hostname</name>
-        <value>true</value>
+        <value>false</value>
         <description>
             Whether clients should use datanode hostnames when connecting to datanodes.
         </description>
@@ -92,9 +93,11 @@
         </description>
     </property>
 
+    <!-- This just breaks the datanode and doesn't fix the issues on the namenode -->
+    <!--
     <property>
         <name>dfs.datanode.address</name>
-        <value>localhost:9866</value>
+        <value>127.0.0.1:9866</value>
         <description>
             The datanode server address and port for data transfer.
         </description>
@@ -102,7 +105,7 @@
 
     <property>
         <name>dfs.datanode.http.address</name>
-        <value>localhost:9864</value>
+        <value>127.0.0.1:9864</value>
         <description>
             The datanode http server address and port.
         </description>
@@ -110,9 +113,10 @@
 
     <property>
         <name>dfs.datanode.ipc.address</name>
-        <value>localhost:9867</value>
+        <value>127.0.0.1:9867</value>
         <description>
             The datanode ipc server address and port.
         </description>
     </property>
+    -->
 </configuration>
