@@ -30,8 +30,11 @@ psql:
 	PGPASSWORD=$(PG_PASS) psql -h localhost -U $(PG_USER)
 
 # Browser
-open-hadoop:
+open-namenode:
 	open http://localhost:9870
+
+open-datanode:
+	open http://localhost:9864
 
 open-app:
 	open http://localhost:8081
