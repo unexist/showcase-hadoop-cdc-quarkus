@@ -35,6 +35,10 @@ dump:
 beeline:
 	@beeline -u "jdbc:hive2://localhost:10000/default"
 
+beeline-init:
+	@beeline -u "jdbc:hive2://localhost:10000/default" -e \
+	"create table if not exists todos(id integer, description string, done string, due date, startdate date, title string) row format delimited fields terminated by '\t' lines terminated by '\n' stored as textfile;"
+
 report:
 	@hdfs dfsadmin -fs hdfs://localhost:9000 -report
 
