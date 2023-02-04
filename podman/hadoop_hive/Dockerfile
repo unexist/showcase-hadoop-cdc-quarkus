@@ -34,7 +34,8 @@ ENV PATH="${PATH}:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${HIVE_HOME}/bin"
 # Download and install Hadoop
 RUN curl -sL --retry 3 "http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz" \
     | tar -xz -C /home/${HADOOP_USER}/ \
-    && rm -rf ${HADOOP_HOME}/share/doc
+    && rm -rf ${HADOOP_HOME}/share/doc \
+    && ln -s ${HADOOP_HOME} /home/${HADOOP_USER}/hadoop
 
 COPY core-site.xml ${HADOOP_HOME}/etc/hadoop/
 COPY hdfs-site.xml ${HADOOP_HOME}/etc/hadoop/
