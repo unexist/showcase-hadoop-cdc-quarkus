@@ -29,3 +29,4 @@ Alpine/Musl.
 - https://iceberg.apache.org/
 - https://hadoop.apache.org/docs/r1.0.4/webhdfs.html#FsURIvsHTTP_URL
 - https://stackoverflow.com/questions/59978213/debezium-could-not-access-file-decoderbufs-using-postgres-11-with-default-plug
+- https://debezium.io/documentation/reference/stable/development/engine.html#database-history-properties
