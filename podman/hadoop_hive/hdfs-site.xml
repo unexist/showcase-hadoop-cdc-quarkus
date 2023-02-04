@@ -94,7 +94,7 @@
     </property>
 
     <!-- This just breaks the datanode and doesn't fix the issues on the namenode -->
-    <property>
+    <!--<property>
         <name>dfs.datanode.address</name>
         <value>10.88.0.10:9866</value>
         <description>
@@ -116,5 +116,5 @@
         <description>
             The datanode ipc server address and port.
         </description>
-    </property>
+    </property>-->
 </configuration>
