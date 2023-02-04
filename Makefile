@@ -27,7 +27,19 @@ list:
 
 
 psql:
-	PGPASSWORD=$(PG_PASS) psql -h localhost -U $(PG_USER)
+	@PGPASSWORD=$(PG_PASS) psql -h localhost -U $(PG_USER)
+
+dump:
+	@PGPASSWORD=$(PG_PASS) pg_dump -h localhost -U $(PG_PASS) --data-only --table=todos | \grep -E "^[0-9]+.*" > dump.sql
+
+beeline:
+	@beeline -u "jdbc:hive2://localhost:10000/default"
+
+report:
+	@hdfs dfsadmin -fs hdfs://localhost:9000 -report
+
+upload:
+	@hdfs dfs -put dump.sql hdfs://localhost:9000/tmp
 
 # Browser
 open-namenode:
