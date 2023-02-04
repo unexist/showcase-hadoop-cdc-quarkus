@@ -40,7 +40,10 @@ pd-hadoop-build:
 pd-hadoop-hive-build:
 	@podman build --format docker -t custom-hadoop-hive -f hadoop_hive/Dockerfile
 
-pd-build: pd-iceberg-build pd-postgres-build pd-hadoop-build pd-hadoop-hive-build
+pd-hadoop-hive-spark-build:
+	@podman build --format docker -t custom-hadoop-hive-spark -f hadoop_hive_spark/Dockerfile
+
+pd-build: pd-iceberg-build pd-postgres-build pd-hadoop-build pd-hadoop-hive-build pd-hadoop-hive-spark-build
 
 pd-postgres:
 	@podman run -dit --name postgres --pod=$(PODNAME) \
@@ -57,9 +60,12 @@ pd-hadoop:
 pd-hadoop-hive:
 	@podman run -dit --name hadoop-hive-single --pod=$(PODNAME) custom-hadoop-hive:latest
 
+pd-hadoop-hive-spark:
+	@podman run -dit --name hadoop-hive-spark-single --pod=$(PODNAME) custom-hadoop-hive-spark:latest
+
 pd-init: pd-machine-init pd-machine-start pd-pod-create pd-images-build
 
-pd-start: pd-postgres pd-hadoop-hive pd-iceberg
+pd-start: pd-postgres pd-hadoop-hive-spark pd-iceberg
 
 # Iceberg
 iceberg:
