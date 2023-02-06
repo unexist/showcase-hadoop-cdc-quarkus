@@ -79,9 +79,10 @@ RUN curl -sL --retry 3 "https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/sp
     && mv /home/${HADOOP_USER}/spark-${SPARK_VERSION}-bin-hadoop3 ${SPARK_HOME} \
     && ln -s ${SPARK_HOME} /home/${HADOOP_USER}/spark
 
-COPY hive-site.xml ${SPARK_HOME}/conf/hive-site.xml
-COPY spark-env.sh ${SPARK_HOME}/conf/spark-env.sh
-COPY slaves ${SPARK_HOME}/conf/slaves
+COPY spark-env.sh ${SPARK_HOME}/conf/
+COPY slaves ${SPARK_HOME}/conf/
+
+RUN echo "export HADOOP_CONF_DIR='${HADOOP_HOME}/etc/hadoop'" >> ${SPARK_HOME}/conf/spark-env.sh
 
 EXPOSE 50070 50075 50010 50020 50090 8020 9000 9864 9870 10000 10020 19888 8088 8030 8031 8032 8033 8040 8042 22
 # 9088 = 9000 = 9083 =
