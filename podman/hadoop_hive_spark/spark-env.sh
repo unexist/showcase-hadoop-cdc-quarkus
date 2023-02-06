@@ -6,6 +6,7 @@ export SPARK_MASTER_IP="localhost"
 export SPARK_WORKER_INSTANCES=1
 export SPARK_LOCAL_IP="localhost"
 export SPARK_MASTER_WEBUI_PORT=4040
+export SPARK_WORKER_WEBUI_PORT=4041
 
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more

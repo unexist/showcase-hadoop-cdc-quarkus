@@ -47,6 +47,7 @@ COPY mapred-site.xml ${HADOOP_HOME}/etc/hadoop/
 
 # Set options based on variables
 RUN echo "export JAVA_HOME=\"/opt/java/openjdk/\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
+    && echo "export HADOOP_HOME=\"${HADOOP_HOME}\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
     && echo "export HDFS_NAMENODE_USER=\"${HADOOP_USER}\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
     && echo "export HDFS_DATANODE_USER=\"${HADOOP_USER}\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
     && echo "export HDFS_SECONDARYNAMENODE_USER=\"${HADOOP_USER}\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
@@ -85,14 +86,6 @@ COPY slaves ${SPARK_HOME}/conf/
 RUN echo "export HADOOP_CONF_DIR='${HADOOP_HOME}/etc/hadoop'" >> ${SPARK_HOME}/conf/spark-env.sh
 
 EXPOSE 22 4040 8020 8030 8031 8032 8033 8040 8042 8088 9000 9864 9870 10000 10020 19888 50010 50020 50030 50070 50075 50090
-# 4040 = Spark Web Port
-# 9088 = 9000 = 9083 =
-# 9864 = Hadoop webhfs, 9870 = Hadoop, 9999 = Hive Metastore UI, 10000 = Hive Thrift,
-# 50010 = Datanode transfer
-# 50020 = Datanode IPC
-# 50075  = Datanode UI
-# 50030 = Jobtracker Port
-#EXPOSE 8088 9000 9083 9864 9870 9999 10000 50010 50020 50075
 
 # FORMATNODES=0 will prevent formatter
 ENV FORMATNODES=1
