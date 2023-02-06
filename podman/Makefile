@@ -15,9 +15,26 @@ pd-machine-rm:
 pd-machine-recreate: pd-machine-rm pd-machine-init pd-machine-start
 
 pd-pod-create:
+# 4040 = Spark master web port
+# 4041 = Spark slave web port
+# 8080 = Iceberg
+# 8088 = Hadoop Resource Manager
+# 9088 =
+# 9000 =
+# 9083 =
+# 9864 = Hadoop datanode web port
+# 9867 = Hadoop datanode IPC port
+# 9870 = Hadoop namenode web port
+# 9999 = Hive Metastore UI
+# 10000 = Hive Thrift
+# 50010 = Datanode transfer
+# 50020 = Datanode IPC
+# 50075 = Datanode UI
+# 50030 = Jobtracker port
 	@podman pod create -n $(PODNAME) --network bridge \
 		-p 5432:5432 \
-		-p 4040:4040 -p 8020:8020 -p 8088:8088 -p 9000:9000 -p 9083:9083 -p 9864:9864 -p 9870:9870 -p 9999:9999 -p 10000:10000 -p 50030:50030
+		-p 8080:8080 \
+		-p 4040:4040 -p 4041:4041 -p 8020:8020 -p 8088:8088 -p 9000:9000 -p 9083:9083 -p 9864:9864 -p 9870:9870 -p 9999:9999 -p 10000:10000 -p 50030:50030
 
 pd-pod-rm:
 	@podman pod rm -f $(PODNAME)

@@ -55,6 +55,9 @@ open-datanode:
 open-spark:
 	open http://localhost:4040
 
+open-resource:
+	open http://localhost:8088
+
 open-app:
 	open http://localhost:8081
 
