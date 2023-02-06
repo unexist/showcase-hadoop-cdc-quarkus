@@ -52,6 +52,9 @@ open-namenode:
 open-datanode:
 	open http://localhost:9864
 
+open-spark:
+	open http://localhost:4040
+
 open-app:
 	open http://localhost:8081
 
