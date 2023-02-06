@@ -42,11 +42,10 @@ fi
 # Setup FS/Hive
 if [[ -z ${FORMATNODES} || ${FORMATNODES} -ne 0 ]]; then
     echo "Creating directories"
-    ${HADOOP_HOME}/bin/hdfs dfs -mkdir /tmp
-    ${HADOOP_HOME}/bin/hdfs dfs -mkdir /users
-    ${HADOOP_HOME}/bin/hdfs dfs -mkdir /jars
-    ${HADOOP_HOME}/bin/hdfs dfs -mkdir /warehouse
-    ${HADOOP_HOME}/bin/hdfs dfs -mkdir /warehouse/hive
+    ${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /tmp
+    ${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /users
+    ${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /jars
+    ${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /warehouse/hive
 
     ${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /tmp
     ${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /users

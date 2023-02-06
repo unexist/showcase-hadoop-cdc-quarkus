@@ -34,9 +34,10 @@ fi
 
 # Setup FS
 if [[ -z ${FORMATNODES} || ${FORMATNODES} -ne 0 ]]; then
-    ${HADOOP_HOME}/bin/hdfs dfs -mkdir /tmp
-    ${HADOOP_HOME}/bin/hdfs dfs -mkdir /users
-    ${HADOOP_HOME}/bin/hdfs dfs -mkdir /jars
+    ${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /tmp
+    ${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /users
+    ${HADOOP_HOME}/bin/hdfs dfs -mkdir -p /jars
+
     ${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /tmp
     ${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /users
     ${HADOOP_HOME}/bin/hdfs dfs -chmod 777 /jars
