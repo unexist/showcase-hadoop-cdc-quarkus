@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 export JAVA_HOME="/opt/java/openjdk/"
+
 export SPARK_MASTER_IP="localhost"
-# export SPARK_WORKER_CORES=1
-# export SPARK_WORKER_MEMORY=800m
 export SPARK_WORKER_INSTANCES=1
 export SPARK_LOCAL_IP="localhost"
+export SPARK_MASTER_WEBUI_PORT=4040
 
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
