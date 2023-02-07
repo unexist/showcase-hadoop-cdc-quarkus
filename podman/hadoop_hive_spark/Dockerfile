@@ -73,6 +73,7 @@ RUN curl -sL --retry 3 "https://www-eu.apache.org/dist/hive/hive-${HIVE_VERSION}
     && ln -s ${HIVE_HOME} /home/${HADOOP_USER}/hive
 
 COPY hive-site.xml ${HIVE_HOME}/conf/hive-site.xml
+COPY iceberg-hive-runtime-1.1.0.jar ${HIVE_HOME}/lib/
 
 RUN echo "export JAVA_HOME=/opt/java/openjdk/" >> ${HIVE_HOME}/conf/hive-env.sh \
     && echo "export HADOOP_HOME='${HADOOP_HOME}'" >> ${HIVE_HOME}/conf/hive-env.sh \
@@ -86,6 +87,7 @@ RUN curl -sL --retry 3 "https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/sp
 
 COPY spark-env.sh ${SPARK_HOME}/conf/
 COPY slaves ${SPARK_HOME}/conf/
+COPY spark-defaults.conf  ${SPARK_HOME}/conf/
 
 RUN echo "export HADOOP_CONF_DIR='${HADOOP_HOME}/etc/hadoop'" >> ${SPARK_HOME}/conf/spark-env.sh
 
