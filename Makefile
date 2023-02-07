@@ -1,5 +1,7 @@
 PG_USER := postgres
 PG_PASS := postgres
+HADOOP_USER := hduser
+HIVE_JDBC := "jdbc:hive2://localhost:10000/default"
 
 define JSON_TODO
 curl -X 'POST' \
@@ -25,25 +27,40 @@ todo:
 list:
 	@curl -X "GET" "http://localhost:8080/todo" -H 'accept: */*' | jq .
 
-
-psql:
-	@PGPASSWORD=$(PG_PASS) psql -h localhost -U $(PG_USER)
-
-dump:
-	@PGPASSWORD=$(PG_PASS) pg_dump -h localhost -U $(PG_PASS) --data-only --table=todos | \grep -E "^[0-9]+.*" > dump.sql
-
-beeline:
-	@beeline -u "jdbc:hive2://localhost:10000/default"
-
-beeline-init:
-	@beeline -u "jdbc:hive2://localhost:10000/default" -e \
-	"create table if not exists todos(id integer, description string, done string, due date, startdate date, title string) row format delimited fields terminated by '\t' lines terminated by '\n' stored as textfile;"
-
 report:
 	@hdfs dfsadmin -fs hdfs://localhost:9000 -report
 
 upload:
 	@hdfs dfs -put dump.sql hdfs://localhost:9000/tmp
+
+# Postgres
+psql:
+	@PGPASSWORD=$(PG_PASS) psql -h localhost -U $(PG_USER)
+
+psql-dump:
+	@PGPASSWORD=$(PG_PASS) pg_dump -h localhost -U $(PG_PASS) --data-only --table=todos | \grep -E "^[0-9]+.*" > dump.sql
+
+# Beeline
+beeline:
+	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER)
+
+beeline-init:
+	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) -e \
+	"CREATE TABLE IF NOT EXISTS todos(id integer, description string, done string, due date, startdate date, title string) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' STORED AS TEXTFILE;"
+
+beeline-insert:
+	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) -e \
+	"INSERT INTO todos (id, description, done, due, startdate, title) VALUES ($$RANDOM, 'string', 'f', '2023-01-01', '2023-01-01', 'string');"
+
+beeline-select:
+	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) -e "SELECT * FROM todos;"
+
+beeline-delete:
+	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) -e "DELETE FROM todos;"
+
+# Spark
+spark-beeline:
+	@spark-beeline -u $(HIVE_JDBC) -n $(HADOOP_USER)
 
 # Browser
 open-namenode:
