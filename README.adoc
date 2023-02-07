@@ -16,6 +16,14 @@ The jdbc connection string for either anonymous or *hduser* for Hive is followin
 jdbc:hive2://localhost:10000/default
 ----
 
+And adding the external Debezium table works:
+
+[source,sql]
+----
+add jar /home/hduser/hive/lib/iceberg-hive-runtime-1.1.0.jar;
+create external table debezium stored by 'org.apache.iceberg.mr.hive.HiveIcebergStorageHandler' location 'hdfs://localhost:9000/warehouse/debeziumevents/debeziumcdc_showcase_public_todos' TBLPROPERTIES ('iceberg.catalog'='location_based_table')"
+----
+
 == Links
 
 === Hadoop
@@ -43,3 +51,7 @@ jdbc:hive2://localhost:10000/default
 - https://hadoop.apache.org/docs/r1.0.4/webhdfs.html#FsURIvsHTTP_URL
 - https://stackoverflow.com/questions/59978213/debezium-could-not-access-file-decoderbufs-using-postgres-11-with-default-plug
 - https://debezium.io/documentation/reference/stable/development/engine.html#database-history-properties
+
+=== Iceberg
+
+- https://iceberg.apache.org/docs/latest/hive/#create-external-table-overlaying-an-existing-iceberg-table
