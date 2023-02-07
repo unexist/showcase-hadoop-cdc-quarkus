@@ -56,6 +56,10 @@ RUN echo "export JAVA_HOME=\"/opt/java/openjdk/\"" >> ${HADOOP_HOME}/etc/hadoop/
     && echo "export HDFS_NAMENODE_OPTS=\"\${HDFS_NAMENODE_OPTS} -Ddfs.namenode.name.dir=file://${HADOOP_HOME}/hdfs/namenode\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
     && echo "export HDFS_DATANODE_OPTS=\"\${HDFS_DATANODE_OPTS} -Ddfs.datanode.data.dir=file://${HADOOP_HOME}/hdfs/datanode\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh
 
+RUN echo "export JAVA_HOME=\"/opt/java/openjdk/\"" >> ${HADOOP_HOME}/etc/hadoop/mapred-env.sh \
+    && echo "export HADOOP_MAPRED_HOME='${HADOOP_HOME}'" >> ${HADOOP_HOME}/etc/hadoop/mapred-env.sh \
+    && echo "export HADOOP_HOME=\"${HADOOP_HOME}\"" >> ${HADOOP_HOME}/etc/hadoop/mapred-env.sh
+
 # Create paths
 RUN mkdir -p ${HADOOP_HOME}/hdfs/namenode \
     && mkdir -p ${HADOOP_HOME}/hdfs/datanode \

@@ -19,6 +19,17 @@
         <value>yarn</value>
     </property>
     <property>
+        <name>mapreduce.map.memory.mb</name>
+        <value>3072</value>
+    </property>
+    <property>
+        <name>mapreduce.reduce.memory.mb</name>
+        <value>3072</value>
+    </property>
+
+    <!-- Set via mapred-env.sh -->
+    <!--
+    <property>
         <name>yarn.app.mapreduce.am.env</name>
         <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
     </property>
@@ -30,12 +41,5 @@
         <name>mapreduce.reduce.env</name>
         <value>HADOOP_MAPRED_HOME=${HADOOP_HOME}</value>
     </property>
-    <property>
-        <name>mapreduce.map.memory.mb</name>
-        <value>3072</value>
-    </property>
-    <property>
-        <name>mapreduce.reduce.memory.mb</name>
-        <value>3072</value>
-    </property>
+    -->
 </configuration>
