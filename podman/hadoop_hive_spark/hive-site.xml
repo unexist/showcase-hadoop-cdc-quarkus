@@ -71,4 +71,12 @@
         <name>iceberg.engine.hive.enabled</name>
         <value>true</value>
     </property>
+    <property>
+        <name>iceberg.catalog.todo-catalog.type</name>
+        <value>hadoop</value>
+    </property>
+    <property>
+        <name>iceberg.catalog.todo-catalog.warehouse</name>
+        <value>hdfs://localhost:9000/warehouse/hive</value>
+    </property>
 </configuration>
