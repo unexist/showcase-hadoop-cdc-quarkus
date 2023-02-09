@@ -17,6 +17,8 @@ pd-machine-recreate: pd-machine-rm pd-machine-init pd-machine-start
 pd-pod-create:
 # 4040 = Spark master web port
 # 4041 = Spark slave web port
+# 6066 = Spark REST port
+# 7077 = Spark master port
 # 8080 = Iceberg
 # 8088 = Hadoop Resource Manager
 # 9088 =
@@ -34,7 +36,7 @@ pd-pod-create:
 	@podman pod create -n $(PODNAME) --network bridge \
 		-p 5432:5432 \
 		-p 8080:8080 \
-		-p 4040:4040 -p 4041:4041 -p 8020:8020 -p 8088:8088 -p 9000:9000 -p 9083:9083 -p 9864:9864 -p 9870:9870 -p 9999:9999 -p 10000:10000 -p 50030:50030
+		-p 4040:4040 -p 4041:4041 -p 6066:6066 -p 7077:7077 -p 8020:8020 -p 8088:8088 -p 9000:9000 -p 9083:9083 -p 9864:9864 -p 9870:9870 -p 9999:9999 -p 10000:10000 -p 50030:50030
 
 pd-pod-rm:
 	@podman pod rm -f $(PODNAME)
