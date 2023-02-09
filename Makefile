@@ -63,9 +63,16 @@ beeline-debezium:
 	-e "add jar /home/$(HADOOP_USER)/hive/lib/iceberg-hive-runtime-1.1.0.jar;" \
 	-e "create external table debezium stored by 'org.apache.iceberg.mr.hive.HiveIcebergStorageHandler' location 'hdfs://localhost:9000/warehouse/debeziumevents/debeziumcdc_showcase_public_todos' TBLPROPERTIES ('iceberg.catalog'='location_based_table')"
 
+beeline-copy:
+	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) \
+	-e "insert into todos (id, description, done, title) select id, description, done, title from debezium;"
+
 # Spark
 spark-beeline:
 	@spark-beeline -u $(HIVE_JDBC) -n $(HADOOP_USER)
+
+spark-shell:
+	@spark-shell --master spark://localhost:4040
 
 # Browser
 open-namenode:
@@ -74,10 +81,13 @@ open-namenode:
 open-datanode:
 	open http://localhost:9864
 
-open-spark:
+open-spark-master:
 	open http://localhost:4040
 
-open-resource:
+open-spark-slave:
+	open http://localhost:4041
+
+open-resourcemanager:
 	open http://localhost:8088
 
 open-app:
