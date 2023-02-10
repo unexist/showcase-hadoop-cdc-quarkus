@@ -8,3 +8,4 @@ target/
 .mvn/
 
 podman/debezium-server-iceberg
+metastore_db/
