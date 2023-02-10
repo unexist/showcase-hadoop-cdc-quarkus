@@ -46,7 +46,7 @@ COPY yarn-site.xml ${HADOOP_HOME}/etc/hadoop/
 COPY mapred-site.xml ${HADOOP_HOME}/etc/hadoop/
 
 # Set options based on variables
-RUN echo "export JAVA_HOME=\"/opt/java/openjdk/\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
+RUN echo -e "\nexport JAVA_HOME=\"/opt/java/openjdk/\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
     && echo "export HADOOP_HOME=\"${HADOOP_HOME}\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
     && echo "export HDFS_NAMENODE_USER=\"${HADOOP_USER}\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
     && echo "export HDFS_DATANODE_USER=\"${HADOOP_USER}\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
@@ -75,7 +75,7 @@ RUN curl -sL --retry 3 "https://www-eu.apache.org/dist/hive/hive-${HIVE_VERSION}
 COPY hive-site.xml ${HIVE_HOME}/conf/hive-site.xml
 COPY iceberg-hive-runtime-1.1.0.jar ${HIVE_HOME}/lib/
 
-RUN echo "export JAVA_HOME=/opt/java/openjdk/" >> ${HIVE_HOME}/conf/hive-env.sh \
+RUN echo -e "\nexport JAVA_HOME=/opt/java/openjdk/" >> ${HIVE_HOME}/conf/hive-env.sh \
     && echo "export HADOOP_HOME='${HADOOP_HOME}'" >> ${HIVE_HOME}/conf/hive-env.sh \
     && echo "export HIVE_CONF_DIR='${HIVE_HOME}/conf'" >> ${HIVE_HOME}/conf/hive-env.sh
 
@@ -87,9 +87,10 @@ RUN curl -sL --retry 3 "https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/sp
 
 COPY spark-env.sh ${SPARK_HOME}/conf/
 COPY slaves ${SPARK_HOME}/conf/
-COPY spark-defaults.conf  ${SPARK_HOME}/conf/
+COPY spark-defaults.conf ${SPARK_HOME}/conf/
 
-RUN echo "export JAVA_HOME=/opt/java/openjdk/" >> ${SPARK_HOME}/conf/spark-env.sh \
+# The file doesn't end on a blank line
+RUN echo -e "\nexport JAVA_HOME=/opt/java/openjdk/" >> ${SPARK_HOME}/conf/spark-env.sh \
     && echo "export HADOOP_CONF_DIR='${HADOOP_HOME}/etc/hadoop'" >> ${SPARK_HOME}/conf/spark-env.sh
 
 EXPOSE 22 4040 4041 6066 7077 8020 8030 8031 8032 8033 8040 8042 8088 9000 9864 9870 10000 10020 19888 50010 50020 50030 50070 50075 50090
