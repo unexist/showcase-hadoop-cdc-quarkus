@@ -77,6 +77,6 @@
     </property>
     <property>
         <name>iceberg.catalog.todo-catalog.warehouse</name>
-        <value>hdfs://localhost:9000/warehouse/hive</value>
+        <value>hdfs://localhost:9000/warehouse</value>
     </property>
 </configuration>
