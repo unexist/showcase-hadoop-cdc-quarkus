@@ -14,15 +14,20 @@
     </parent>
 
     <properties>
-        <spark-core_2.13.version>3.3.1</spark-core_2.13.version>
         <scala-maven-plugin.version>4.8.0</scala-maven-plugin.version>
+        <spark-2.13.version>3.3.1</spark-2.13.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.13</artifactId>
-            <version>${spark-core_2.13.version}</version>
+            <version>${spark-2.13.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_2.13</artifactId>
+            <version>${spark-2.13.version}</version>
         </dependency>
     </dependencies>
 

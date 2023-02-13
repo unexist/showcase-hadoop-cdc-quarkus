@@ -1,5 +1,8 @@
+import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.SparkConf
+import org.apache.spark.sql.streaming.Trigger
+
+import java.util.concurrent.TimeUnit
 
 def main(args: Array[String]): Unit = {
 
@@ -21,21 +24,16 @@ def main(args: Array[String]): Unit = {
   val spark = SparkSession
     .builder()
     .config(sparkConf)
-    .appName("StructuredSinkIceberg")
+    .appName("TodoSparkSink")
     .getOrCreate()
-
-  val checkpointPath = "oss://mybucket/tmp/iceberg_table_checkpoint"
-  val bootstrapServers = "localhost:9092"
-  val topic = "iceberg_test"
 
   /* Read data from the Kafka cluster */
   val df = spark.readStream
     .format("kafka")
-    .option("kafka.bootstrap.servers", bootstrapServers)
-    .option("subscribe", topic)
+    .option("kafka.bootstrap.servers", "localhost:9092")
+    .option("subscribe", "todo_created")
     .load()
 
-  import spark.implicits._
   val resDF = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
     .as[(String, String)].toDF("id", "data")
 
@@ -45,7 +43,6 @@ def main(args: Array[String]): Unit = {
     .outputMode("append")
     .trigger(Trigger.ProcessingTime(1, TimeUnit.MINUTES))
     .option("path", "dlf_catalog.iceberg_db.iceberg_table")
-    .option("checkpointLocation", checkpointPath)
     .start()
 
   query.awaitTermination()
