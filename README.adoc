@@ -55,3 +55,8 @@ create external table debezium stored by 'org.apache.iceberg.mr.hive.HiveIceberg
 === Iceberg
 
 - https://iceberg.apache.org/docs/latest/hive/#create-external-table-overlaying-an-existing-iceberg-table
+
+=== Scala
+
+- https://davidb.github.io/scala-maven-plugin/usage.html
+- https://www.alibabacloud.com/help/en/e-mapreduce/latest/use-spark-to-write-data-to-an-iceberg-table-in-streaming-mode
