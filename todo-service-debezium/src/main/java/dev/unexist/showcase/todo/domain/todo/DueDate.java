@@ -11,7 +11,9 @@
 
 package dev.unexist.showcase.todo.domain.todo;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import dev.unexist.showcase.todo.infrastructure.serde.DateDeserializer;
 import dev.unexist.showcase.todo.infrastructure.serializer.DateSerializer;
 
 import javax.persistence.Embeddable;
@@ -19,10 +21,14 @@ import java.time.LocalDate;
 
 @Embeddable
 public class DueDate {
+    public static final String DATE_PATTERN = "yyyy-MM-dd";
+
     @JsonSerialize(using = DateSerializer.class)
+    @JsonDeserialize(using = DateDeserializer.class)
     private LocalDate start;
 
     @JsonSerialize(using = DateSerializer.class)
+    @JsonDeserialize(using = DateDeserializer.class)
     private LocalDate due;
 
     /**
