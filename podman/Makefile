@@ -46,7 +46,7 @@ pd-pod-rm:
 pd-pod-recreate: pd-pod-rm pd-pod-create
 
 pd-iceberg-build:
-	#@git clone https://github.com/memiiso/debezium-server-iceberg.git
+	@! [[ -d "debezium-server-iceberg" ]] && git clone https://github.com/memiiso/debezium-server-iceberg.git
 	@cp iceberg/Dockerfile debezium-server-iceberg/Dockerfile
 	@cat iceberg/application.properties | sed -e "s/%%PG_USER%%/$(PG_USER)/" -e "s/%%PG_PASS%%/$(PG_PASS)/" > debezium-server-iceberg/application.properties
 
