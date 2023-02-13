@@ -46,6 +46,9 @@ public class TodoResource {
     @Inject
     TodoService todoService;
 
+    @Inject
+    TodoSource todoSource;
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -56,14 +59,16 @@ public class TodoResource {
             @APIResponse(responseCode = "406", description = "Bad data"),
             @APIResponse(responseCode = "500", description = "Server error")
     })
-    public Response create(TodoBase base, @Context UriInfo uriInfo) {
+    public Response create(TodoBase todoBase, @Context UriInfo uriInfo) {
         Response.ResponseBuilder response;
 
-        int newId = this.todoService.create(base);
+        Optional<Todo> todo = this.todoService.create(todoBase);
 
-        if (-1 != newId) {
+        if (todo.isPresent()) {
+            this.todoSource.send(todo.get());
+
             URI uri = uriInfo.getAbsolutePathBuilder()
-                    .path(Integer.toString(newId))
+                    .path(Integer.toString(todo.get().getId()))
                     .build();
 
             response = Response.created(uri);
