@@ -27,6 +27,7 @@ pd-pod-create:
 # 9864 = Hadoop datanode web port
 # 9867 = Hadoop datanode IPC port
 # 9870 = Hadoop namenode web port
+# 9092 = Kafka port
 # 9999 = Hive Metastore UI
 # 10000 = Hive Thrift
 # 50010 = Datanode transfer
@@ -35,6 +36,7 @@ pd-pod-create:
 # 50030 = Jobtracker port
 	@podman pod create -n $(PODNAME) --network bridge \
 		-p 5432:5432 \
+		-p 9092:9092 \
 		-p 8080:8080 \
 		-p 4040:4040 -p 4041:4041 -p 6066:6066 -p 7077:7077 -p 8020:8020 -p 8088:8088 -p 9000:9000 -p 9083:9083 -p 9864:9864 -p 9870:9870 -p 9999:9999 -p 10000:10000 -p 50030:50030
 
@@ -53,16 +55,10 @@ pd-iceberg-build:
 pd-postgres-build:
 	@podman build --format docker -t custom-postgres -f postgres/Dockerfile
 
-pd-hadoop-build:
-	@podman build --format docker -t custom-hadoop -f hadoop/Dockerfile
-
-pd-hadoop-hive-build:
-	@podman build --format docker -t custom-hadoop-hive -f hadoop_hive/Dockerfile
-
 pd-hadoop-hive-spark-build:
 	@podman build --format docker -t custom-hadoop-hive-spark -f hadoop_hive_spark/Dockerfile
 
-pd-build: pd-iceberg-build pd-postgres-build pd-hadoop-build pd-hadoop-hive-build pd-hadoop-hive-spark-build
+pd-build: pd-iceberg-build pd-postgres-build pd-hadoop-hive-spark-build
 
 pd-postgres:
 	@podman run -dit --name postgres --pod=$(PODNAME) \
@@ -76,15 +72,15 @@ pd-iceberg:
 pd-hadoop:
 	@podman run -dit --name hadoop-single --pod=$(PODNAME) custom-hadoop:latest
 
-pd-hadoop-hive:
-	@podman run -dit --name hadoop-hive-single --pod=$(PODNAME) custom-hadoop-hive:latest
-
 pd-hadoop-hive-spark:
 	@podman run -dit --name hadoop-hive-spark-single --pod=$(PODNAME) custom-hadoop-hive-spark:latest
 
+pd-redpanda:
+	@podman run -dit --name redpanda --pod=$(PODNAME) vectorized/redpanda
+
 pd-init: pd-machine-init pd-machine-start pd-pod-create pd-images-build
 
-pd-start: pd-postgres pd-hadoop-hive-spark pd-iceberg
+pd-start: pd-redpanda pd-postgres pd-hadoop-hive-spark pd-iceberg
 
 # Iceberg
 iceberg:

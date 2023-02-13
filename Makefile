@@ -79,6 +79,13 @@ spark-beeline:
 spark-shell:
 	@spark-shell --master spark://localhost:7077
 
+# Kafkacat
+kat-test:
+	@kcat -t todo_created -b localhost:9092 -P
+
+kat-listen:
+	@kcat -t todo_created -b localhost:9092 -C
+
 # Browser
 open-namenode:
 	open http://localhost:9870
