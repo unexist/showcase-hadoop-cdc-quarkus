@@ -9,3 +9,4 @@ target/
 
 podman/debezium-server-iceberg
 metastore_db/
+derby.log
