@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,13 +34,12 @@ public class TodoService {
      * @return Either id of the entry on success; otherwise {@code -1}
      **/
 
-    @Transactional
-    public int create(TodoBase base) {
+    public Optional<Todo> create(TodoBase base) {
         Todo todo = new Todo(base);
 
         boolean retval = this.todoRepository.add(todo);
 
-        return retval ? todo.getId() : -1;
+        return Optional.ofNullable(retval ? null : todo);
     }
 
     /**
