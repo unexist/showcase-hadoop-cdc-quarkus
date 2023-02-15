@@ -46,7 +46,8 @@ COPY yarn-site.xml ${HADOOP_HOME}/etc/hadoop/
 COPY mapred-site.xml ${HADOOP_HOME}/etc/hadoop/
 
 # Set options based on variables
-RUN echo -e "\nexport JAVA_HOME=\"/opt/java/openjdk/\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
+RUN echo "" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
+    && echo "export JAVA_HOME=\"/opt/java/openjdk/\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
     && echo "export HADOOP_HOME=\"${HADOOP_HOME}\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
     && echo "export HDFS_NAMENODE_USER=\"${HADOOP_USER}\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
     && echo "export HDFS_DATANODE_USER=\"${HADOOP_USER}\"" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
@@ -73,9 +74,13 @@ RUN curl -sL --retry 3 "https://www-eu.apache.org/dist/hive/hive-${HIVE_VERSION}
     && ln -s ${HIVE_HOME} /home/${HADOOP_USER}/hive
 
 COPY hive-site.xml ${HIVE_HOME}/conf/hive-site.xml
-COPY iceberg-hive-runtime-1.1.0.jar ${HIVE_HOME}/lib/
 
-RUN echo -e "\nexport JAVA_HOME=/opt/java/openjdk/" >> ${HIVE_HOME}/conf/hive-env.sh \
+# Add jars
+RUN curl -sL --retry 3 -O "https://search.maven.org/remotecontent?filepath=org/apache/iceberg/iceberg-hive-runtime/1.1.0/iceberg-hive-runtime-1.1.0.jar" \
+    && mv iceberg-hive-runtime-1.1.0.jar ${HIVE_HOME}/lib/
+
+RUN echo "" >> ${HIVE_HOME}/conf/hive-env.sh \
+    && echo "export JAVA_HOME=/opt/java/openjdk/" >> ${HIVE_HOME}/conf/hive-env.sh \
     && echo "export HADOOP_HOME='${HADOOP_HOME}'" >> ${HIVE_HOME}/conf/hive-env.sh \
     && echo "export HIVE_CONF_DIR='${HIVE_HOME}/conf'" >> ${HIVE_HOME}/conf/hive-env.sh
 
@@ -89,8 +94,13 @@ COPY spark-env.sh ${SPARK_HOME}/conf/
 COPY slaves ${SPARK_HOME}/conf/
 COPY spark-defaults.conf ${SPARK_HOME}/conf/
 
+# Add jars
+RUN curl -sL --retry 3 -O "https://search.maven.org/remotecontent?filepath=org/apache/iceberg/iceberg-spark-runtime-3.3_2.13/1.1.0/iceberg-spark-runtime-3.3_2.13-1.1.0.jar" \
+    && mv iceberg-spark-runtime-3.3_2.13-1.1.0.jar ${SPARK_HOME}/jars/
+
 # The file doesn't end on a blank line
-RUN echo -e "\nexport JAVA_HOME=/opt/java/openjdk/" >> ${SPARK_HOME}/conf/spark-env.sh \
+RUN echo "" >> ${SPARK_HOME}/conf/spark-env.sh \
+    && echo "export JAVA_HOME=/opt/java/openjdk/" >> ${SPARK_HOME}/conf/spark-env.sh \
     && echo "export HADOOP_CONF_DIR='${HADOOP_HOME}/etc/hadoop'" >> ${SPARK_HOME}/conf/spark-env.sh
 
 EXPOSE 22 4040 4041 6066 7077 8020 8030 8031 8032 8033 8040 8042 8088 9000 9864 9870 10000 10020 19888 50010 50020 50030 50070 50075 50090
