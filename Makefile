@@ -77,7 +77,11 @@ spark-beeline:
 	@spark-beeline -u $(HIVE_JDBC) -n $(HADOOP_USER)
 
 spark-shell:
-	@spark-shell --master spark://localhost:7077
+	@spark-shell --master spark://localhost:7077 \
+	--packages org.apache.iceberg:iceberg-spark-runtime-3.3_2.13:1.1.0 \
+	--conf spark.sql.catalog.todo_catalog=org.apache.iceberg.spark.SparkCatalog \
+	--conf spark.sql.catalog.todo_catalog.type=hadoop \
+	--conf spark.sql.catalog.todo_catalog.warehouse=hdfs://localhost:9000/warehouse
 
 # Kafkacat
 kat-test:
