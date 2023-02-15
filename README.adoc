@@ -57,6 +57,11 @@ create external table debezium stored by 'org.apache.iceberg.mr.hive.HiveIceberg
 - https://iceberg.apache.org/docs/latest/hive/#create-external-table-overlaying-an-existing-iceberg-table
 - https://iceberg.apache.org/releases/#downloads
 
+=== Spark
+
+- https://www.dremio.com/blog/introduction-to-apache-iceberg-using-spark/
+- https://spark.apache.org/docs/latest/sql-getting-started.html
+
 === Scala
 
 - https://davidb.github.io/scala-maven-plugin/usage.html
