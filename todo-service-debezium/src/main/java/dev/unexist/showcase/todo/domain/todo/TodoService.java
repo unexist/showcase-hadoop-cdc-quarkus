@@ -16,12 +16,12 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
 public class TodoService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TodoService.class);
 
     @Inject
     TodoRepository todoRepository;
@@ -34,6 +34,7 @@ public class TodoService {
      * @return Either id of the entry on success; otherwise {@code -1}
      **/
 
+    @Transactional
     public Optional<Todo> create(TodoBase base) {
         Todo todo = new Todo(base);
 
