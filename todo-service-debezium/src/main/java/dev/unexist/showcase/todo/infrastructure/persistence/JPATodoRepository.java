@@ -13,8 +13,6 @@ package dev.unexist.showcase.todo.infrastructure.persistence;
 
 import dev.unexist.showcase.todo.domain.todo.Todo;
 import dev.unexist.showcase.todo.domain.todo.TodoRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -24,7 +22,6 @@ import java.util.Optional;
 
 @ApplicationScoped
 public class JPATodoRepository implements TodoRepository {
-    private static final Logger LOGGER = LoggerFactory.getLogger(JPATodoRepository.class);
 
     @Inject
     EntityManager entityManager;
