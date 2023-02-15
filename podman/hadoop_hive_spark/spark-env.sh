@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-export SPARK_WORKER_INSTANCES=1
-export SPARK_MASTER_IP="localhost"
-export SPARK_LOCAL_IP="localhost"
-export SPARK_MASTER_WEBUI_PORT=4040
-export SPARK_WORKER_WEBUI_PORT=4041
-
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -73,3 +67,9 @@ export SPARK_WORKER_WEBUI_PORT=4041
 # You might get better performance to enable these options if using native BLAS (see SPARK-21305).
 # - MKL_NUM_THREADS=1        Disable multi-threading of Intel MKL
 # - OPENBLAS_NUM_THREADS=1   Disable multi-threading of OpenBLAS
+
+export SPARK_WORKER_INSTANCES=1
+export SPARK_MASTER_IP="localhost"
+export SPARK_LOCAL_IP="localhost"
+export SPARK_MASTER_WEBUI_PORT=4040
+export SPARK_WORKER_WEBUI_PORT=4041
