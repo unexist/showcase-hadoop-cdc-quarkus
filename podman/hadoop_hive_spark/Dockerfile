@@ -95,8 +95,8 @@ COPY slaves ${SPARK_HOME}/conf/
 COPY spark-defaults.conf ${SPARK_HOME}/conf/
 
 # Add jars
-RUN curl -sL --retry 3 -O "https://search.maven.org/remotecontent?filepath=org/apache/iceberg/iceberg-spark-runtime-3.3_2.13/1.1.0/iceberg-spark-runtime-3.3_2.13-1.1.0.jar" \
-    && mv iceberg-spark-runtime-3.3_2.13-1.1.0.jar ${SPARK_HOME}/jars/
+RUN curl -sL --retry 3 -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.1_2.12/1.1.0/iceberg-spark-runtime-3.1_2.12-1.1.0.jar" \
+    && mv iceberg-spark-runtime-3.1_2.12-1.1.0.jar ${SPARK_HOME}/jars/
 
 # The file doesn't end on a blank line
 RUN echo "" >> ${SPARK_HOME}/conf/spark-env.sh \

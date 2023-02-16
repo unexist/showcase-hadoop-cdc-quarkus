@@ -2,6 +2,7 @@ PG_USER := postgres
 PG_PASS := postgres
 HADOOP_USER := hduser
 HIVE_JDBC := "jdbc:hive2://localhost:10000/default"
+SPARK_DEPLOY_MODE := cluster
 
 define JSON_TODO
 curl -X 'POST' \
@@ -76,12 +77,25 @@ beeline-init: beeline-hive-init beeline-debezium-init
 spark-beeline:
 	@spark-beeline -u $(HIVE_JDBC) -n $(HADOOP_USER)
 
+# Pey attention to the Spark and Scala versions, they must match Spark
 spark-shell:
 	@spark-shell --master spark://localhost:7077 \
-	--packages org.apache.iceberg:iceberg-spark-runtime-3.3_2.13:1.1.0 \
+	--packages org.apache.iceberg:iceberg-spark-runtime-3.1_2.12:1.1.0,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.1 \
 	--conf spark.sql.catalog.todo_catalog=org.apache.iceberg.spark.SparkCatalog \
 	--conf spark.sql.catalog.todo_catalog.type=hadoop \
 	--conf spark.sql.catalog.todo_catalog.warehouse=hdfs://localhost:9000/warehouse
+
+spark-submit:
+	@spark-submit --master spark://localhost:7077 \
+	--packages org.apache.iceberg:iceberg-spark-runtime-3.1_2.12:1.1.0,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.1 \
+	--name todosink \
+	--deploy-mode $(SPARK_DEPLOY_MODE) \
+	--num-executors 1 \
+	--class dev.unexist.showcase.todo.TodoSparkSink \
+	todo-spark-sink/target/todo-spark-sink-0.1.jar
+
+spark-status:
+	@spark-submit --master spark://localhost:7077 --status $(ID)
 
 # Kafkacat
 kat-test:
