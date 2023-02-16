@@ -9,6 +9,8 @@
  * See the file LICENSE for details.
  **/
 
+package dev.unexist.showcase.todo
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
@@ -19,10 +21,10 @@ import java.util.concurrent.TimeUnit
 object TodoSparkSink {
   def main(args: Array[String]): Unit = {
 
-    /* Configure the parameters for the catalog */
+    /* Configure parameters */
     val sparkConf = new SparkConf()
 
-    sparkConf.set("spark.sql.extensions", "org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions")
+    sparkConf.set("packages", "org.apache.iceberg:iceberg-spark-runtime-3.3_2.13:1.1.0,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.1")
     sparkConf.set("spark.sql.catalog.todo_catalog", "org.apache.iceberg.spark.SparkCatalog")
     sparkConf.set("spark.sql.catalog.todo_catalog.type", "hadoop")
     sparkConf.set("spark.sql.catalog.todo_catalog.warehouse", "hdfs://localhost:9000/warehouse")
@@ -35,7 +37,7 @@ object TodoSparkSink {
 
     import spark.implicits._
 
-    /* Read data from the Kafka cluster */
+    /* Read data from Kafka */
     val df = spark.readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", "localhost:9092")
@@ -44,11 +46,13 @@ object TodoSparkSink {
 
     /* Field annotations just work for the direct field */
     @SuppressFBWarnings(value = Array("BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"), justification = "I don't know what I am doing")
-    val dataFrame = df.selectExpr("CAST(title AS STRING)", "CAST(description AS STRING)")
+    val dataFrame = df.selectExpr("CAST(value AS STRING)")
+    //val dataFrame = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
 
-    val resDF = dataFrame.as[(String, String)].toDF("title", "description")
+    val resDF = dataFrame.as[(String)].toDF("value")
+    //val resDF = dataFrame.as[(String, String)].toDF("key", "value")
 
-    /* Write data to the Iceberg table in streaming mode */
+    /* Write data to the Iceberg table in streaming mode every minute */
     val query = resDF.writeStream
       .format("iceberg")
       .outputMode("append")
