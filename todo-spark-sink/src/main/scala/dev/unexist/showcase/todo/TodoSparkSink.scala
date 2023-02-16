@@ -46,11 +46,9 @@ object TodoSparkSink {
 
     /* Field annotations just work for the direct field */
     @SuppressFBWarnings(value = Array("BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"), justification = "I don't know what I am doing")
-    val dataFrame = df.selectExpr("CAST(value AS STRING)")
-    //val dataFrame = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+    val dataFrame = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
 
-    val resDF = dataFrame.as[(String)].toDF("value")
-    //val resDF = dataFrame.as[(String, String)].toDF("key", "value")
+    val resDF = dataFrame.as[(String, String)].toDF("key", "value")
 
     /* Write data to the Iceberg table in streaming mode every minute */
     val query = resDF.writeStream
