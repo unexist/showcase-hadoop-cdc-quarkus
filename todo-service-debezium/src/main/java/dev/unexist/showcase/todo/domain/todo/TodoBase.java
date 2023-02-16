@@ -11,6 +11,8 @@
 
 package dev.unexist.showcase.todo.domain.todo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.MappedSuperclass;
@@ -18,6 +20,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @MappedSuperclass
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TodoBase {
 
     @NotBlank
