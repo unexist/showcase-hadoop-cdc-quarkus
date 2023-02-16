@@ -11,9 +11,9 @@
 package dev.unexist.showcase.todo.adapter;
 
 import dev.unexist.showcase.todo.domain.todo.Todo;
+import io.smallrye.reactive.messaging.kafka.KafkaRecord;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
-import org.eclipse.microprofile.reactive.messaging.Message;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -32,6 +32,6 @@ public class TodoSource {
      **/
 
     public void send(Todo todo) {
-        this.emitter.send(Message.of(todo));
+        this.emitter.send(KafkaRecord.of(todo.getId(), todo));
     }
 }
