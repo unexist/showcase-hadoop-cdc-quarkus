@@ -40,7 +40,7 @@ public class TodoService {
 
         boolean retval = this.todoRepository.add(todo);
 
-        return Optional.ofNullable(retval ? null : todo);
+        return Optional.ofNullable(retval ? todo : null);
     }
 
     /**
