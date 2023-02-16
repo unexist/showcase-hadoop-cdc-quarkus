@@ -4,8 +4,28 @@ This project holds a showcase for Hadoop with CDC on Quarkus.
 
 == Problems
 
+=== Dockerfile
+
 Apparently the datanodes use compoents like C-libraries which I couldn't get not to core dump in
 Alpine/Musl.
+
+=== Scala
+
+```text
+java.lang.NoSuchMethodError: 'scala.collection.immutable.ArraySeq scala.runtime.ScalaRunTime$.wrapRefArray(java.lang.Object[])'
+```
+
+```text
+Caused by: java.lang.ClassNotFoundException: scala.$less$colon$less
+```
+
+Make sure the Scala version of the jars/dependencies match the Scala version of Spark.
+
+This can be easily checked with:
+
+```shell
+mvn dependency:tree
+```
 
 == Hive
 
