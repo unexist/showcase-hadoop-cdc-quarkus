@@ -4,7 +4,7 @@ MAINTAINER Christoph Kappel <christoph@unexist.dev>
 
 RUN apt-get -qq -o Acquire::Max-FutureTime=604800 update -y \
     && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -qq install -y --no-install-recommends doas curl ssh less \
+    && apt-get -qq install -y --no-install-recommends doas curl ssh less vim \
     && apt-get clean
 
 RUN groupadd wheel \
