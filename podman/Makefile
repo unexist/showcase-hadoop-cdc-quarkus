@@ -23,7 +23,7 @@ pd-pod-create:
 # 8088 = Hadoop Resource Manager
 # 9088 =
 # 9000 =
-# 9083 =
+# 9083 = Hive thrift metastore
 # 9864 = Hadoop datanode web port
 # 9867 = Hadoop datanode IPC port
 # 9870 = Hadoop namenode web port
