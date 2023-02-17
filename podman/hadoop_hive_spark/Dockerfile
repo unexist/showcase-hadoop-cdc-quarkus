@@ -2,7 +2,7 @@ FROM eclipse-temurin:8-jdk
 
 MAINTAINER Christoph Kappel <christoph@unexist.dev>
 
-RUN apt-get -qq -o Acquire::Max-FutureTime=604800 update -y \
+RUN apt-get -qq -o Acquire::Max-FutureTime=1209600 update -y \
     && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -qq install -y --no-install-recommends doas curl ssh less vim \
     && apt-get clean
@@ -84,6 +84,9 @@ RUN echo "" >> ${HIVE_HOME}/conf/hive-env.sh \
     && echo "export HADOOP_HOME='${HADOOP_HOME}'" >> ${HIVE_HOME}/conf/hive-env.sh \
     && echo "export HIVE_CONF_DIR='${HIVE_HOME}/conf'" >> ${HIVE_HOME}/conf/hive-env.sh
 
+# Create paths
+RUN mkdir -p ${HIVE_HOME}/logs
+
 # Download and install Spark
 RUN curl -sL --retry 3 "https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.tgz" \
     | tar -xz -C /home/${HADOOP_USER}/ \
@@ -91,6 +94,7 @@ RUN curl -sL --retry 3 "https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/sp
     && ln -s ${SPARK_HOME} /home/${HADOOP_USER}/spark
 
 COPY spark-env.sh ${SPARK_HOME}/conf/
+COPY spark-init.sh ${SPARK_HOME}/bin/
 COPY slaves ${SPARK_HOME}/conf/
 COPY spark-defaults.conf ${SPARK_HOME}/conf/
 
@@ -114,7 +118,10 @@ ENV YARNSTART=1
 # MAPREDUCESTART=0 will prevent mapreduce from being launched
 ENV MAPREDUCESTART=1
 
-# sPARKSTART=0 will prevent spark from being launched
+# SPARKSTART=0 will prevent spark from being launched
 ENV SPARKSTART=1
+
+# HIVESTART=0 will prevent hive from being launched
+ENV HIVESTART=1
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

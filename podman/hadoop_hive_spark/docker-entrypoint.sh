@@ -61,7 +61,14 @@ fi
 
 ${HADOOP_HOME}/bin/hdfs dfsadmin -safemode leave
 
-# Keep the container running indefinitely
-#tail -f ${HADOOP_HOME}/logs/hadoop-*-namenode-*.log
+if [[ -z ${HIVESTART} || ${HIVESTART} -ne 0 ]]; then
+    echo "Starting hive metaservice"
+    ${HIVE_HOME}/bin/hive --service metastore >> ${HIVE_HOME}/logs/metastore.log &
 
-${HIVE_HOME}/bin/hiveserver2
+    echo "Starting hive server"
+    ${HIVE_HOME}/bin/hiveserver2
+else
+    echo "Not starting hive"
+    # Keep the container running indefinitely
+    tail -f ${HADOOP_HOME}/logs/hadoop-*-namenode-*.log
+fi
