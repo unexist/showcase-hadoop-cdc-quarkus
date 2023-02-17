@@ -82,6 +82,7 @@ create external table debezium stored by 'org.apache.iceberg.mr.hive.HiveIceberg
 - https://www.dremio.com/blog/introduction-to-apache-iceberg-using-spark/
 - https://spark.apache.org/docs/latest/sql-getting-started.html
 - https://spark.apache.org/docs/latest/structured-streaming-kafka-integration.html
+- https://sparkbyexamples.com/apache-hive/how-to-connect-spark-to-remote-hive/
 
 === Scala
 
