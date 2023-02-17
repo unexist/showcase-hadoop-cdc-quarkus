@@ -2,7 +2,7 @@ FROM eclipse-temurin:11-jdk as builder
 
 MAINTAINER Christoph Kappel <christoph@unexist.dev>
 
-RUN apt-get -qq update -o Acquire::Max-FutureTime=604800 \
+RUN apt-get -qq update -o Acquire::Max-FutureTime=31536000 \
     && apt-get -qq install --no-install-recommends maven unzip less \
     && apt-get clean
 
