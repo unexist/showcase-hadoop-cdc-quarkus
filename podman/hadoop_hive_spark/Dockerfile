@@ -8,7 +8,7 @@ RUN apt-get -qq -o Acquire::Max-FutureTime=604800 update -y \
     && apt-get clean
 
 RUN groupadd wheel \
-    && useradd -m hduser -G wheel \
+    && useradd -m hduser -G wheel -s /usr/bin/bash \
     && echo "hduser:hduser" | chpasswd \
     && echo "permit nopass :wheel" > /etc/doas.conf
 
