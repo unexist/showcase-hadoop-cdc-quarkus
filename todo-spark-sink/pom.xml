@@ -3,51 +3,34 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
+    <groupId>dev.unexist.showcase</groupId>
     <artifactId>todo-spark-sink</artifactId>
     <version>0.1</version>
 
-    <parent>
-        <groupId>dev.unexist.showcase</groupId>
-        <artifactId>showcase-hadoop-cdc-quarkus</artifactId>
-        <version>0.1</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
-
     <properties>
         <scala-maven-plugin.version>4.8.0</scala-maven-plugin.version>
-        <spark-2.13.version>3.3.1</spark-2.13.version>
+        <spark-2.12.version>3.3.1</spark-2.12.version>
     </properties>
 
     <dependencies>
         <!-- Spark -->
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_2.13</artifactId>
-            <version>${spark-2.13.version}</version>
+            <artifactId>spark-core_2.12</artifactId>
+            <version>${spark-2.12.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql_2.13</artifactId>
-            <version>${spark-2.13.version}</version>
+            <artifactId>spark-sql_2.12</artifactId>
+            <version>${spark-2.12.version}</version>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-sql-kafka-0-10_2.13</artifactId>
-            <version>${spark-2.13.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming-kafka-0-10_2.13</artifactId>
-            <version>${spark-2.13.version}</version>
-        </dependency> -->
 
-        <!-- Spotbugs -->
+        <!-- Spotbugs
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
             <version>${spotbugs-plugin.version}</version>
-        </dependency>
+        </dependency> -->
     </dependencies>
 
     <build>

@@ -15,6 +15,5 @@
 
     <modules>
         <module>todo-service-debezium</module>
-        <module>todo-spark-sink</module>
     </modules>
 </project>

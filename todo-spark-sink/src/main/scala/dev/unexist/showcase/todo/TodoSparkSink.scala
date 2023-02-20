@@ -11,7 +11,7 @@
 
 package dev.unexist.showcase.todo
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings
+Remov//import edu.umd.cs.findbugs.annotations.SuppressFBWarnings
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.streaming.Trigger
@@ -45,7 +45,7 @@ object TodoSparkSink {
       .load()
 
     /* Field annotations just work for the direct field */
-    @SuppressFBWarnings(value = Array("BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"), justification = "I don't know what I am doing")
+    //@SuppressFBWarnings(value = Array("BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"), justification = "I don't know what I am doing")
     val dataFrame = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
 
     val resDF = dataFrame.as[(String, String)].toDF("key", "value")
