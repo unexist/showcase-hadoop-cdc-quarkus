@@ -3,6 +3,7 @@ PG_PASS := postgres
 HADOOP_USER := hduser
 HIVE_JDBC := "jdbc:hive2://localhost:10000/default"
 SPARK_DEPLOY_MODE := cluster
+TMP := ""
 
 define JSON_TODO
 curl -X 'POST' \
@@ -34,9 +35,9 @@ report:
 upload:
 	@hdfs dfs -put dump.sql hdfs://localhost:9000/tmp
 
+copy: CONTAINERID = $(shell podman container ls | grep hadoop | awk '{print $$1}')
 copy:
-	containerid=`podman container ls | \grep hadoop | awk '{print $1}'`
-	@podman cp todo-spark-sink/target/todo-spark-sink-0.1.jar $$containerid:/home/hduser
+	@podman cp todo-spark-sink/target/todo-spark-sink-0.1.jar $(CONTAINERID):/home/hduser
 
 # Postgres
 psql:
