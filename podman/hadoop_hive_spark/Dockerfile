@@ -31,7 +31,7 @@ ENV HADOOP_HOME="/home/${HADOOP_USER}/hadoop-${HADOOP_VERSION}"
 ENV HIVE_VERSION="3.1.3"
 ENV HIVE_HOME="/home/${HADOOP_USER}/hive-${HIVE_VERSION}"
 
-ENV SPARK_VERSION="3.3.1"
+ENV SPARK_VERSION="3.3.2"
 ENV SPARK_HOME="/home/${HADOOP_USER}/spark-${SPARK_VERSION}"
 
 ENV PATH="${PATH}:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${HIVE_HOME}/bin:${SPARK_HOME}/bin"
@@ -101,8 +101,8 @@ COPY slaves ${SPARK_HOME}/conf/
 COPY spark-defaults.conf ${SPARK_HOME}/conf/
 
 # Add jars
-RUN curl -sL --retry 3 -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.1_2.12/1.1.0/iceberg-spark-runtime-3.1_2.12-1.1.0.jar" \
-    && mv iceberg-spark-runtime-3.1_2.12-1.1.0.jar ${SPARK_HOME}/jars/
+RUN curl -sL --retry 3 -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.3_2.12/1.1.0/iceberg-spark-runtime-3.3_2.12-1.1.0.jar" \
+    && mv iceberg-spark-runtime-3.3_2.12-1.1.0.jar ${SPARK_HOME}/jars/
 
 # The file doesn't end on a blank line
 RUN echo "" >> ${SPARK_HOME}/conf/spark-env.sh \
