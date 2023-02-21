@@ -55,28 +55,36 @@ beeline-insert:
 	-e "INSERT INTO todos (id, description, done, due, startdate, title) VALUES ($$RANDOM, 'string', 'f', '2023-01-01', '2023-01-01', 'string');"
 
 beeline-hive-select:
-	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) -e "SELECT * FROM todos;"
+	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) -e "SELECT * FROM hive_todos;"
 
 beeline-debezium-select:
-	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) -e "SELECT * FROM debezium;"
+	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) -e "SELECT * FROM debezium_todos;"
+
+beeline-spark-select:
+	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) -e "SELECT * FROM spark_todos;"
 
 beeline-delete:
-	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) -e "DELETE FROM todos;"
+	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) -e "DELETE FROM hive_todos;"
 
 beeline-hive-init:
 	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) \
-	-e "CREATE TABLE IF NOT EXISTS todos(id integer, description string, done string, due date, startdate date, title string) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' STORED AS TEXTFILE;"
+	-e "CREATE TABLE IF NOT EXISTS hive_todos(id integer, description string, done string, due date, startdate date, title string) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' LINES TERMINATED BY '\n' STORED AS TEXTFILE;"
 
 beeline-debezium-init:
 	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) \
 	-e "ADD JAR /home/$(HADOOP_USER)/hive/lib/iceberg-hive-runtime-1.1.0.jar;" \
-	-e "CREATE EXTERNAL TABLE IF NOT EXISTS debezium STORED BY 'org.apache.iceberg.mr.hive.HiveIcebergStorageHandler' LOCATION 'hdfs://localhost:9000/warehouse/debeziumevents/debeziumcdc_showcase_public_todos' TBLPROPERTIES ('iceberg.catalog'='location_based_table')"
+	-e "CREATE EXTERNAL TABLE IF NOT EXISTS debezium_todos STORED BY 'org.apache.iceberg.mr.hive.HiveIcebergStorageHandler' LOCATION 'hdfs://localhost:9000/warehouse/debezium/debeziumcdc_showcase_public_todos' TBLPROPERTIES ('iceberg.catalog'='location_based_table')"
+
+beeline-spark-init:
+	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) \
+	-e "ADD JAR /home/$(HADOOP_USER)/hive/lib/iceberg-hive-runtime-1.1.0.jar;" \
+	-e "CREATE EXTERNAL TABLE IF NOT EXISTS spark_todos STORED BY 'org.apache.iceberg.mr.hive.HiveIcebergStorageHandler' LOCATION 'hdfs://localhost:9000/warehouse/spark/todos' TBLPROPERTIES ('iceberg.catalog'='location_based_table')"
 
 beeline-copy:
 	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) \
 	-e "INSERT INTO todos (id, description, done, title) SELECT id, description, done, title FROM debezium;"
 
-beeline-init: beeline-hive-init beeline-debezium-init
+beeline-init: beeline-hive-init beeline-debezium-init beeline-spark-init
 
 # Spark
 spark-beeline:
@@ -85,7 +93,7 @@ spark-beeline:
 # Pay attention to the Spark and Scala versions, they must match Spark
 spark-shell:
 	@spark-shell --master spark://localhost:7077 \
-	--packages org.apache.iceberg:iceberg-spark-runtime-3.3_2.12:1.1.0,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.2 \
+	--packages org.apache.iceberg:iceberg-spark-runtime-3.3_2.12:1.1.0 \
 	--conf spark.sql.catalog.todo_catalog=org.apache.iceberg.spark.SparkCatalog \
 	--conf spark.sql.catalog.todo_catalog.type=hadoop \
 	--conf spark.sql.catalog.todo_catalog.warehouse=hdfs://localhost:9000/warehouse
