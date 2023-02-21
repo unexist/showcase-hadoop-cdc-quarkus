@@ -4,7 +4,7 @@ MAINTAINER Christoph Kappel <christoph@unexist.dev>
 
 RUN apt-get -qq -o Acquire::Max-FutureTime=31536000 update -y \
     && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -qq install -y --no-install-recommends doas curl ssh less vim \
+    && apt-get -qq install -y --no-install-recommends doas curl ssh less vim make \
     && apt-get clean
 
 RUN groupadd wheel \
@@ -35,6 +35,8 @@ ENV SPARK_VERSION="3.3.2"
 ENV SPARK_HOME="/home/${HADOOP_USER}/spark-${SPARK_VERSION}"
 
 ENV PATH="${PATH}:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${HIVE_HOME}/bin:${SPARK_HOME}/bin"
+
+COPY Makefile /home/${HADOOP_USER}
 
 # Download and install Hadoop
 RUN curl -sL --retry 3 "http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz" \
