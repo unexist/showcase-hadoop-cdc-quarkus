@@ -2,7 +2,7 @@
  * @package Showcase-Hadoop-CDC-Quarkus
  *
  * @file Spark sink
- * @copyright 2020-present Christoph Kappel <christoph@unexist.dev>
+ * @copyright 2023-present Christoph Kappel <christoph@unexist.dev>
  * @version $Id$
  *
  * This program can be distributed under the terms of the Apache License v2.0.
@@ -42,6 +42,7 @@ object TodoSparkSink {
       .format("kafka")
       .option("kafka.bootstrap.servers", "localhost:9092")
       .option("subscribe", "todo_created")
+      .option("checkpointLocation", "/tmp/checkpoint")
       .load()
 
     /* Field annotations just work for the direct field */
