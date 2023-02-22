@@ -61,7 +61,10 @@ pd-postgres-build:
 pd-hadoop-hive-spark-build:
 	@podman build --format docker -t custom-hadoop-hive-spark -f hadoop_hive_spark/Dockerfile
 
-pd-build: pd-iceberg-build pd-postgres-build pd-hadoop-hive-spark-build
+pd-quarkus-build:
+	cd .. && mvn clean package -Dquarkus.container-image.build=true #-Dquarkus.container-image.push=true
+
+pd-build: pd-iceberg-build pd-postgres-build pd-hadoop-hive-spark-build pd-quarkus-build
 
 pd-postgres:
 	@podman run -dit --name postgres --pod=$(PODNAME) \
@@ -81,9 +84,12 @@ pd-hadoop-hive-spark:
 pd-redpanda:
 	@podman run -dit --name redpanda --pod=$(PODNAME) vectorized/redpanda
 
+pd-quarkus:
+	@podman run -dit --name quarkus --pod=$(PODNAME) todo-quarkus-debezium:latest
+
 pd-init: pd-machine-init pd-machine-start pd-pod-create pd-images-build
 
-pd-start: pd-redpanda pd-postgres pd-hadoop-hive-spark pd-iceberg
+pd-start: pd-redpanda pd-postgres pd-hadoop-hive-spark pd-iceberg pd-quarkus
 
 # Iceberg
 iceberg:
