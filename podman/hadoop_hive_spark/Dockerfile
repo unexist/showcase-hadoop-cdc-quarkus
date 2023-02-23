@@ -98,7 +98,6 @@ RUN curl -sL --retry 3 "https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/sp
     && ln -s ${SPARK_HOME} /home/${HADOOP_USER}/spark
 
 COPY spark-env.sh ${SPARK_HOME}/conf/
-COPY spark-init.sh ${SPARK_HOME}/bin/
 COPY slaves ${SPARK_HOME}/conf/
 COPY spark-defaults.conf ${SPARK_HOME}/conf/
 
