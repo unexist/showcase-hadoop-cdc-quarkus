@@ -1,5 +1,7 @@
 FROM eclipse-temurin:8-jdk
 
+MAINTAINER Christoph Kappel <christoph@unexist.dev>
+
 RUN apt-get -o Acquire::Max-FutureTime=31536000 update -y \
     && export DEBIAN_FRONTEND=noninteractive \
     && apt-get install -y --no-install-recommends doas curl ssh \
