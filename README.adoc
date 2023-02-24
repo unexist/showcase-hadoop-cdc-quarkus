@@ -19,7 +19,8 @@ ssh: Connection closed by 127.0.0.1 port 22
 sshd: chroot("/run/sshd"): Operation not permitted [preauth]
 ```
 
-https://github.com/containers/podman/releases/tag/v4.4.1
+- https://github.com/containers/podman/releases/tag/v4.4.1
+- https://forum.gitlab.com/t/failure-on-ssh-push-pull/82244
 
 === Scala
 
