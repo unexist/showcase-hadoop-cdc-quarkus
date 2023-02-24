@@ -81,7 +81,7 @@ pd-hadoop:
 	@podman run -dit --name hadoop-single --pod=$(PODNAME) custom-hadoop:latest
 
 pd-hadoop-hive-spark:
-	@podman run -dit --name hadoop-hive-spark-single --pod=$(PODNAME) custom-hadoop-hive-spark:latest
+	@podman run -dit --name hadoop-hive-spark-single --cap-add SYS_CHROOT --pod=$(PODNAME) custom-hadoop-hive-spark:latest
 
 pd-redpanda:
 	@podman run -dit --name redpanda --pod=$(PODNAME) vectorized/redpanda
