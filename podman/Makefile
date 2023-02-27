@@ -42,9 +42,6 @@ pd-pod-create:
 		-p 9092:9092 \
 		-p 4040:4040 -p 4041:4041 -p 6066:6066 -p 7077:7077 -p 8020:8020 -p 8088:8088 -p 9000:9000 -p 9083:9083 -p 9864:9864 -p 9870:9870 -p 9999:9999 -p 10000:10000 -p 50030:50030
 
-pd-pod-create-host:
-	@podman pod create -n $(PODNAME) --network host
-
 pd-pod-rm:
 	@podman pod rm -f $(PODNAME)
 
