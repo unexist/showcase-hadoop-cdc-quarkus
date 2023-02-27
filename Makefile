@@ -3,7 +3,6 @@ PG_PASS := postgres
 HADOOP_USER := hduser
 HIVE_JDBC := "jdbc:hive2://localhost:10000/default"
 SPARK_DEPLOY_MODE := cluster
-TMP := ""
 
 define JSON_TODO
 curl -X 'POST' \
