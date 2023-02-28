@@ -84,7 +84,7 @@ pd-redpanda:
 	@podman run -dit --name redpanda --pod=$(PODNAME) vectorized/redpanda
 
 pd-quarkus:
-	@podman run -dit --name quarkus --pod=$(PODNAME) todo-quarkus-debezium:latest
+	@podman run -dit --name quarkus --pod=$(PODNAME) todo-service-debezium:0.1
 
 pd-init: pd-machine-init pd-machine-start pd-pod-create pd-images-build
 
