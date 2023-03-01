@@ -3,7 +3,7 @@ PODNAME := hadoop
 PG_USER := postgres
 PG_PASS := postgres
 
-pd-machine-init:
+pd-machine-create:
 	@podman machine init --memory=16384 --cpus=4 --disk-size=100
 
 pd-machine-start:
@@ -12,7 +12,7 @@ pd-machine-start:
 pd-machine-rm:
 	@podman machine rm -f
 
-pd-machine-recreate: pd-machine-rm pd-machine-init pd-machine-start
+pd-machine-recreate: pd-machine-rm pd-machine-create pd-machine-start
 
 pd-pod-create:
 # 4040 = Spark master web port

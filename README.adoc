@@ -2,6 +2,15 @@
 
 This project holds a showcase for Hadoop with CDC on Quarkus.
 
+== Instructions
+
+Following make targets exist in the subfolder podman:
+
+- **pd-machine-create** - Create a suitable Qemu machine
+- **pd-pod-create** - Create the pod with port mappings
+- **pd-build** - Build all images
+- **pd-start** - Start all container
+
 == Problems
 
 === Dockerfile
@@ -96,6 +105,7 @@ create external table debezium stored by 'org.apache.iceberg.mr.hive.HiveIceberg
 - https://spark.apache.org/docs/latest/sql-getting-started.html
 - https://spark.apache.org/docs/latest/structured-streaming-kafka-integration.html
 - https://sparkbyexamples.com/apache-hive/how-to-connect-spark-to-remote-hive/
+- https://codait.github.io/spark-bench/
 
 === Scala
 
