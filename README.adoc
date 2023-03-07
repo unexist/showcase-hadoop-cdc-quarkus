@@ -4,12 +4,21 @@ This project holds a showcase for Hadoop with CDC on Quarkus.
 
 == Instructions
 
-Following make targets exist in the subfolder podman:
+Following make targets exist in the subfolder Podman:
 
 - **pd-machine-create** - Create a suitable Qemu machine
 - **pd-pod-create** - Create the pod with port mappings
 - **pd-build** - Build all images
+- **pd-init** - Create machine, pod and build all images
 - **pd-start** - Start all container
+
+Following make targets are available here:
+
+-- **todo** - Create todo entry via curl
+-- **list** - List todo entries via curl
+-- **psql** - Use psql CLI to connect to Postgres
+-- **beeline** - Start beeline CLI and connect to Hive
+-- **spark-shell** - Start spark shell and connect to Spark
 
 == Problems
 
