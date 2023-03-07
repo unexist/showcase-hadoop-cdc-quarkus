@@ -115,6 +115,7 @@ create external table debezium stored by 'org.apache.iceberg.mr.hive.HiveIceberg
 - https://spark.apache.org/docs/latest/structured-streaming-kafka-integration.html
 - https://sparkbyexamples.com/apache-hive/how-to-connect-spark-to-remote-hive/
 - https://codait.github.io/spark-bench/
+- https://sparkbyexamples.com/spark/spark-split-dataframe-column-into-multiple-columns/
 
 === Scala
 
