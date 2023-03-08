@@ -83,8 +83,6 @@ beeline-copy:
 	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) \
 	-e "INSERT INTO todos (id, description, done, title) SELECT id, description, done, title FROM debezium;"
 
-beeline-init: beeline-hive-init beeline-debezium-init beeline-spark-init
-
 # Spark
 spark-beeline:
 	@spark-beeline -u $(HIVE_JDBC) -n $(HADOOP_USER)
@@ -111,6 +109,9 @@ spark-submit:
 
 spark-status:
 	@spark-submit --master spark://localhost:7077 --status $(ID)
+
+# Init
+data-init: todo beeline-hive-init beeline-debezium-init beeline-spark-init
 
 # Kafkacat
 kat-test:
