@@ -22,5 +22,13 @@ submit:
 	--class dev.unexist.showcase.todo.TodoSparkSink \
 	hdfs://hadoop:9000/jars/todo-spark-sink-0.1.jar
 
+
+shell:
+	@spark-shell --master spark://hadoop:7077 \
+	--packages org.apache.iceberg:iceberg-spark-runtime-3.3_2.12:1.1.0 \
+	--conf spark.sql.catalog.todo_catalog=org.apache.iceberg.spark.SparkCatalog \
+	--conf spark.sql.catalog.todo_catalog.type=hadoop \
+	--conf spark.sql.catalog.todo_catalog.warehouse=hdfs://localhost:9000/warehouse
+
 status:
 	@spark-submit --master spark://hadoop:7077 --status $(ID)
