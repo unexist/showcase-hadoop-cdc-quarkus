@@ -5,7 +5,8 @@ init:
 	--conf spark.sql.catalog.todo_catalog.type=hadoop \
 	--conf spark.sql.catalog.todo_catalog.warehouse=hdfs://localhost:9000/warehouse \
 	--conf hive.metastore.uris=thrift://localhost:9083 \
-	-e "CREATE TABLE IF NOT EXISTS todo_catalog.spark.todos (key string, value string) USING iceberg"
+	-e "CREATE TABLE IF NOT EXISTS todo_catalog.spark.kafka (key string, value string) USING iceberg" \
+	-e "CREATE TABLE IF NOT EXISTS todo_catalog.spark.todos (id string, description string, done string, due string, startdate string, title string)key string, value string) USING iceberg" \
 
 copy:
 	@hdfs dfs -put todo-spark-sink-0.1.jar hdfs://localhost:9000/jars
