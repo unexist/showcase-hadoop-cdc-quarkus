@@ -47,18 +47,32 @@ object TodoSparkSink {
 
     /* Field annotations just work for the direct field */
     //@SuppressFBWarnings(value = Array("BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"), justification = "I don't know what I am doing")
-    val dataFrame = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+    val dataFrame1 = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
 
-    val resDF = dataFrame.as[(String, String)].toDF("key", "value")
+    val resDF1 = dataFrame1.as[(String, String)].toDF("key", "value")
+
+    /* Write data to the Iceberg table kafka in streaming mode every minute */
+    resDF1.writeStream
+      .format("iceberg")
+      .outputMode("append")
+      .trigger(Trigger.ProcessingTime(1, TimeUnit.MINUTES))
+      .option("path", "todo_catalog.spark.kafka")
+      .start()
+
+    /* Field annotations just work for the direct field
+    //@SuppressFBWarnings(value = Array("BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"), justification = "I don't know what I am doing")
+    val dataFrame2 = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+
+    val resDF2 = dataFrame2.as[(String, String)].toDF("key", "value")
 
     /* Write data to the Iceberg table in streaming mode every minute */
-    val query = resDF.writeStream
+    val query2 = resDF2.writeStream
       .format("iceberg")
       .outputMode("append")
       .trigger(Trigger.ProcessingTime(1, TimeUnit.MINUTES))
       .option("path", "todo_catalog.spark.todos")
-      .start()
+      .start()*/
 
-    query.awaitTermination()
+    spark.streams.awaitAnyTermination()
   }
 }
