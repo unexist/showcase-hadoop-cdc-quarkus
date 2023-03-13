@@ -26,7 +26,7 @@ run:
 
 shell:
 	@spark-shell --master spark://hadoop:7077 \
-	--packages org.apache.iceberg:iceberg-spark-runtime-3.3_2.12:1.1.0 \
+	--packages org.apache.iceberg:iceberg-spark-runtime-3.3_2.12:1.1.0,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.2 \
 	--conf spark.sql.catalog.todo_catalog=org.apache.iceberg.spark.SparkCatalog \
 	--conf spark.sql.catalog.todo_catalog.type=hadoop \
 	--conf spark.sql.catalog.todo_catalog.warehouse=hdfs://localhost:9000/warehouse
