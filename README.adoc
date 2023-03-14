@@ -14,11 +14,11 @@ Following make targets exist in the subfolder Podman:
 
 Following make targets are available here:
 
--- **todo** - Create todo entry via curl
--- **list** - List todo entries via curl
--- **psql** - Use psql CLI to connect to Postgres
--- **beeline** - Start beeline CLI and connect to Hive
--- **spark-shell** - Start spark shell and connect to Spark
+- **todo** - Create todo entry via curl
+- **list** - List todo entries via curl
+- **psql** - Use psql CLI to connect to Postgres
+- **beeline** - Start beeline CLI and connect to Hive
+- **spark-shell** - Start spark shell and connect to Spark
 
 == Problems
 
