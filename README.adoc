@@ -122,6 +122,7 @@ https://github.com/LucaCanali/Miscellaneous/blob/master/Spark_Notes/Spark_Set_Ja
 - https://sparkbyexamples.com/apache-hive/how-to-connect-spark-to-remote-hive/
 - https://codait.github.io/spark-bench/
 - https://sparkbyexamples.com/spark/spark-split-dataframe-column-into-multiple-columns/
+- https://www.adaltas.com/en/2019/04/18/spark-streaming-data-pipelines-with-structured-streaming/
 
 === Scala
 
