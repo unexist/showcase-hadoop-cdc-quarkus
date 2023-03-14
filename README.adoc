@@ -75,6 +75,12 @@ add jar /home/hduser/hive/lib/iceberg-hive-runtime-1.1.0.jar;
 create external table debezium stored by 'org.apache.iceberg.mr.hive.HiveIcebergStorageHandler' location 'hdfs://localhost:9000/warehouse/debeziumevents/debeziumcdc_showcase_public_todos' TBLPROPERTIES ('iceberg.catalog'='location_based_table')"
 ----
 
+== Spark
+
+Spark executors use submitted values for JAVA_HOME:
+
+https://github.com/LucaCanali/Miscellaneous/blob/master/Spark_Notes/Spark_Set_Java_Home_Howto.md
+
 == Links
 
 === Hadoop
