@@ -80,7 +80,7 @@ RUN curl -sL --retry 3 "https://www-eu.apache.org/dist/hive/hive-${HIVE_VERSION}
 COPY hive-site.xml ${HIVE_HOME}/conf/hive-site.xml
 
 # Add jars
-RUN curl -sL --retry 3 -O "https://search.maven.org/remotecontent?filepath=org/apache/iceberg/iceberg-hive-runtime/1.1.0/iceberg-hive-runtime-1.1.0.jar" \
+RUN curl -sL --retry 3 -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-hive-runtime/1.1.0/iceberg-hive-runtime-1.1.0.jar" \
     && mv iceberg-hive-runtime-1.1.0.jar ${HIVE_HOME}/lib/
 
 RUN echo "" >> ${HIVE_HOME}/conf/hive-env.sh \
