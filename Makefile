@@ -60,6 +60,7 @@ beeline-debezium-select:
 	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) -e "SELECT * FROM debezium_todos;"
 
 beeline-spark-select:
+	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) -e "SELECT * FROM spark_messages;"
 	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) -e "SELECT * FROM spark_todos;"
 
 beeline-delete:
