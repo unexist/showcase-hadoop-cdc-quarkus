@@ -77,7 +77,7 @@ beeline-debezium-init:
 beeline-spark-init:
 	@beeline -u $(HIVE_JDBC) -n $(HADOOP_USER) \
 	-e "ADD JAR /home/$(HADOOP_USER)/hive/lib/iceberg-hive-runtime-1.1.0.jar;" \
-	-e "CREATE EXTERNAL TABLE IF NOT EXISTS spark_kafkas STORED BY 'org.apache.iceberg.mr.hive.HiveIcebergStorageHandler' LOCATION 'hdfs://localhost:9000/warehouse/spark/kafka' TBLPROPERTIES ('iceberg.catalog'='location_based_table')" \
+	-e "CREATE EXTERNAL TABLE IF NOT EXISTS spark_messages STORED BY 'org.apache.iceberg.mr.hive.HiveIcebergStorageHandler' LOCATION 'hdfs://localhost:9000/warehouse/spark/messages' TBLPROPERTIES ('iceberg.catalog'='location_based_table')" \
 	-e "CREATE EXTERNAL TABLE IF NOT EXISTS spark_todos STORED BY 'org.apache.iceberg.mr.hive.HiveIcebergStorageHandler' LOCATION 'hdfs://localhost:9000/warehouse/spark/todos' TBLPROPERTIES ('iceberg.catalog'='location_based_table')"
 
 beeline-copy:

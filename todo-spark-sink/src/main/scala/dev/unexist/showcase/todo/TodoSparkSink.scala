@@ -57,7 +57,7 @@ object TodoSparkSink {
       .format("iceberg")
       .outputMode("append")
       .trigger(Trigger.ProcessingTime(1, TimeUnit.MINUTES))
-      .option("path", "todo_catalog.spark.kafkas")
+      .option("path", "todo_catalog.spark.messages")
       .start()
 
     val resDF2 = dataFrame1.as[(String, String)].toDF("key", "value")
