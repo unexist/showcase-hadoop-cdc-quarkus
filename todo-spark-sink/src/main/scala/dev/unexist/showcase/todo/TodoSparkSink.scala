@@ -13,7 +13,8 @@ package dev.unexist.showcase.todo
 
 //import edu.umd.cs.findbugs.annotations.SuppressFBWarnings
 import org.apache.spark.SparkConf
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.{SparkSession, functions}
+import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.streaming.Trigger
 
 import java.util.concurrent.TimeUnit
@@ -56,22 +57,24 @@ object TodoSparkSink {
       .format("iceberg")
       .outputMode("append")
       .trigger(Trigger.ProcessingTime(1, TimeUnit.MINUTES))
-      .option("path", "todo_catalog.spark.kafka")
+      .option("path", "todo_catalog.spark.kafkas")
       .start()
 
-    /* Field annotations just work for the direct field
-    //@SuppressFBWarnings(value = Array("BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"), justification = "I don't know what I am doing")
-    val dataFrame2 = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
-
-    val resDF2 = dataFrame2.as[(String, String)].toDF("key", "value")
+    val resDF2 = dataFrame1.as[(String, String)].toDF("key", "value")
+      .withColumn("title", functions.split(col("value"), ",").getItem(0))
+      .withColumn("description", functions.split(col("value"), ",").getItem(1))
+      .withColumn("done", functions.split(col("value"), ",").getItem(2))
+      .withColumn("due", functions.split(col("value"), ",").getItem(3))
+      .withColumn("startdate", functions.split(col("value"), ",").getItem(4))
+      .drop("value")
 
     /* Write data to the Iceberg table in streaming mode every minute */
-    val query2 = resDF2.writeStream
+    resDF2.writeStream
       .format("iceberg")
       .outputMode("append")
       .trigger(Trigger.ProcessingTime(1, TimeUnit.MINUTES))
       .option("path", "todo_catalog.spark.todos")
-      .start()*/
+      .start()
 
     spark.streams.awaitAnyTermination()
   }
