@@ -80,7 +80,7 @@ RUN curl -sL --retry 3 "https://www-eu.apache.org/dist/hive/hive-${HIVE_VERSION}
 COPY hive-site.xml ${HIVE_HOME}/conf/hive-site.xml
 
 # Add jars
-RUN curl -sL --retry 3 -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-hive-runtime/1.1.0/iceberg-hive-runtime-1.1.0.jar" \
+RUN curl -sL --retry 3 -k -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-hive-runtime/1.1.0/iceberg-hive-runtime-1.1.0.jar" \
     && mv iceberg-hive-runtime-1.1.0.jar ${HIVE_HOME}/lib/
 
 RUN echo "" >> ${HIVE_HOME}/conf/hive-env.sh \
@@ -102,7 +102,7 @@ COPY slaves ${SPARK_HOME}/conf/
 COPY spark-defaults.conf ${SPARK_HOME}/conf/
 
 # Add jars
-RUN curl -sL --retry 3 -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.3_2.12/1.1.0/iceberg-spark-runtime-3.3_2.12-1.1.0.jar" \
+RUN curl -sL --retry 3 -k -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.3_2.12/1.1.0/iceberg-spark-runtime-3.3_2.12-1.1.0.jar" \
     && mv iceberg-spark-runtime-3.3_2.12-1.1.0.jar ${SPARK_HOME}/jars/
 
 # The file doesn't end on a blank line
