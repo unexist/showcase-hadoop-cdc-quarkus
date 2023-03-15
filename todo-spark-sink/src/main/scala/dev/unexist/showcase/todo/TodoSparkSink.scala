@@ -60,6 +60,8 @@ object TodoSparkSink {
       .option("path", "todo_catalog.spark.messages")
       .start()
 
+    /* Field annotations just work for the direct field */
+    //@SuppressFBWarnings(value = Array("BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"), justification = "I don't know what I am doing")
     val resDF2 = dataFrame1.as[(String, String)].toDF("key", "value")
       .withColumn("title", functions.split(col("value"), ",").getItem(0))
       .withColumn("description", functions.split(col("value"), ",").getItem(1))
