@@ -116,7 +116,7 @@ spark-status:
 data-init: todo beeline-hive-init beeline-debezium-init beeline-spark-init
 
 # Kafkacat
-kat-test:
+kat-send:
 	@kcat -t todo_created -b localhost:9092 -P
 
 kat-listen:
