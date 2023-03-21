@@ -2,9 +2,11 @@
 
 This project holds a showcase for Hadoop with CDC on Quarkus.
 
-== Instructions
+== Make targets
 
-Following make targets exist in the subfolder Podman:
+Following make targets exist in the subfolder **podman**:
+
+=== Container and co
 
 - **pd-machine-create** - Create a suitable Qemu machine
 - **pd-pod-create** - Create the pod with port mappings
@@ -14,16 +16,41 @@ Following make targets exist in the subfolder Podman:
 - **pd-init** - Create machine, pod and build all images
 - **pd-start** - Start all container
 
-Following make targets are available here:
+Following make targets are available **here**:
+
+=== Tools
 
 - **todo** - Create todo entry via curl
 - **list** - List todo entries via curl
-- **psql** - Use psql CLI to connect to Postgres
-- **beeline** - Start beeline CLI and connect to Hive
-- **spark-shell** - Start spark shell and connect to Spark
-- **data-init** - Init all Hive data
 - **kat-listen** - Listen for Kafka messages
 - **kat-send** - Send Kafka message
+- **psql** - Use psql CLI to connect to Postgres
+
+=== Hive
+
+- **beeline** - Start beeline CLI and connect to Hive
+- **beeline-hive-select** - Select data from **hive_todos**
+- **beeline-debezium-select** - Select data from **debezium_todos**
+- **beeline-spark-select** - Select data from **spark_messages** and **spark_todos**
+
+=== Spark
+
+- **spark-shell** - Start Spark shell and connect to Spark
+- **spark-beeline** - Start Spark Beeline and connect to Spark
+
+- **data-init** - Init all Hive data
+- **copy** - Copy the Scala jar into the Hadoop container
+
+=== Browser
+
+- **open-namenode** - Open the namenode in a browser
+- **open-datanode** - Open the datanode in a browser
+- **open-spark-master** - Open the Spark master in a browser
+- **open-spark-slave** - Open the Spark slave in a browser
+- **open-spark-shell** - Open the Spark shell in a browser
+- **open-resourcemanager** - Open the Resoucemanager in a browser
+- **open-debezium** - Open the Debezium in a browser
+- **open-app** - Open the Quarkus Dev tools in a browser
 
 == Problems
 

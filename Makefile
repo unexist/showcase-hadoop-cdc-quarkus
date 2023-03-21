@@ -141,8 +141,8 @@ open-spark-shell:
 open-resourcemanager:
 	open http://localhost:8088
 
-open-app:
-	open http://localhost:8081
-
 open-debezium:
 	open http://localhost:8090
+
+open-app:
+	open http://localhost:8081
