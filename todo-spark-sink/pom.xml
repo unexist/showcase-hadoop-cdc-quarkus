@@ -8,8 +8,15 @@
     <version>0.1</version>
 
     <properties>
+        <!-- Project -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
         <scala-maven-plugin.version>4.8.0</scala-maven-plugin.version>
         <spark-2.12.version>3.3.1</spark-2.12.version>
+
+        <!-- Workaround to get a proper timestamp -->
+        <timestamp>${maven.build.timestamp}</timestamp>
     </properties>
 
     <dependencies>
