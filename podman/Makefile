@@ -61,7 +61,7 @@ pd-hadoop-hive-spark-build:
 	@podman build --format docker -t custom-hadoop-hive-spark -f hadoop_hive_spark/Dockerfile
 
 pd-quarkus-build:
-	cd .. && mvn clean package -Dquarkus.container-image.build=true #-Dquarkus.container-image.push=true
+	mvn -f ../todo-service-debezium/pom.xml clean package -Dquarkus.container-image.build=true #-Dquarkus.container-image.push=true
 
 pd-build: pd-iceberg-build pd-postgres-build pd-hadoop-hive-spark-build pd-quarkus-build
 

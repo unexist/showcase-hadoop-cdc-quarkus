@@ -35,7 +35,7 @@ upload:
 	@hdfs dfs -put dump.sql hdfs://localhost:9000/tmp
 
 copy: CONTAINERID = $(shell podman container ls | grep hadoop | awk '{print $$1}')
-copy:
+copy: scala
 	@podman cp todo-spark-sink/target/todo-spark-sink-0.1.jar $(CONTAINERID):/home/hduser
 
 # Postgres
@@ -114,6 +114,10 @@ spark-status:
 
 # Init
 data-init: todo beeline-hive-init beeline-debezium-init beeline-spark-init
+
+# Build
+scala:
+	mvn -f todo-spark-sink/pom.xml package
 
 # Kafkacat
 kat-send:
