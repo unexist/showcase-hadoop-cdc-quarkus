@@ -38,6 +38,10 @@ copy: CONTAINERID = $(shell podman container ls | grep hadoop | awk '{print $$1}
 copy: scala
 	@podman cp todo-spark-sink/target/todo-spark-sink-0.1.jar $(CONTAINERID):/home/hduser
 
+ssh: CONTAINERID = $(shell podman container ls | grep hadoop | awk '{print $$1}')
+ssh:
+	@podman exec -it $(CONTAINERID) /bin/sh
+
 # Postgres
 psql:
 	@PGPASSWORD=$(PG_PASS) psql -h localhost -U $(PG_USER)
@@ -113,7 +117,7 @@ spark-status:
 	@spark-submit --master spark://localhost:7077 --status $(ID)
 
 # Init
-data-init: todo beeline-hive-init beeline-debezium-init beeline-spark-init
+init: todo beeline-hive-init beeline-debezium-init beeline-spark-init
 
 # Build
 scala:
