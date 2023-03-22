@@ -60,14 +60,20 @@ object TodoSparkSink {
       .option("path", "todo_catalog.spark.messages")
       .start()
 
+    /* Order matters:
+     * JSON: {"title":"string","description":"string","done":false,"dueDate":{"start":"2021-05-07","due":"2021-05-07"},"id":1}
+     * Table: (id string, description string, done string, due string, startdate string, title string)
+     */
+
     /* Field annotations just work for the direct field */
     //@SuppressFBWarnings(value = Array("BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"), justification = "I don't know what I am doing")
     val resDF2 = dataFrame1.as[(String, String)].toDF("key", "value")
-      .withColumn("title", functions.split(col("value"), ",").getItem(0))
+      .withColumn("id", col("key"))
       .withColumn("description", functions.split(col("value"), ",").getItem(1))
       .withColumn("done", functions.split(col("value"), ",").getItem(2))
       .withColumn("due", functions.split(col("value"), ",").getItem(3))
       .withColumn("startdate", functions.split(col("value"), ",").getItem(4))
+      .withColumn("title", functions.split(col("value"), ",").getItem(0))
       .drop("key")
       .drop("value")
 
