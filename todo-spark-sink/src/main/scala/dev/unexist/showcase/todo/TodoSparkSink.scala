@@ -68,6 +68,7 @@ object TodoSparkSink {
       .withColumn("done", functions.split(col("value"), ",").getItem(2))
       .withColumn("due", functions.split(col("value"), ",").getItem(3))
       .withColumn("startdate", functions.split(col("value"), ",").getItem(4))
+      .drop("key")
       .drop("value")
 
     /* Write data to the Iceberg table in streaming mode every minute */
