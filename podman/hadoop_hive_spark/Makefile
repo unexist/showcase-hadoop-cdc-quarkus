@@ -9,7 +9,7 @@ init:
 	CREATE TABLE IF NOT EXISTS todo_catalog.spark.todos (id string, description string, done string, due string, startdate string, title string) USING iceberg"
 
 copy:
-	@hdfs dfs -put todo-spark-sink-0.1.jar hdfs://localhost:9000/jars
+	@hdfs dfs -put -f todo-spark-sink-0.1.jar hdfs://localhost:9000/jars
 
 run:
 	@spark-submit --master spark://hadoop:7077 \
