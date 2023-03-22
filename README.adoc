@@ -52,6 +52,17 @@ Following make targets are available **here**:
 - **open-debezium** - Open the Debezium in a browser
 - **open-app** - Open the Quarkus Dev tools in a browser
 
+== How to use
+
+1. Start all container: `make pd-start`
+2. Init Hive tables: `make init`
+3. Compile and copy scala jar: `make copy`
+4. SSH into Hadoop pod: `make ssh`
+5. Copy scala jar to Hadoop: `make copy`
+6. Init Spark tables: `make init`
+7. Run scala jar: `make run`
+8. Create todo via curl: `make todo`
+
 == Problems
 
 === Dockerfile
