@@ -85,6 +85,13 @@ object TodoSparkSink {
       .option("path", "todo_catalog.spark.todos")
       .start()
 
+    /* Wait for the first stream writer to terminate */
+    spark.streams.awaitAnyTermination()
+
+    /* Reset the last terminated streaming query to avoid an immediate return */
+    spark.streams.resetTerminated()
+
+    /* Wait for the remaining one to terminate */
     spark.streams.awaitAnyTermination()
   }
 }
