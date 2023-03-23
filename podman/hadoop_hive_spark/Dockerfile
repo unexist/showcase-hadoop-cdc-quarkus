@@ -39,7 +39,7 @@ ENV PATH="${PATH}:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${HIVE_HOME}/bin:${SPAR
 COPY Makefile /home/${HADOOP_USER}
 
 # Download and install Hadoop
-RUN curl -sL --retry 3 "http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz" \
+RUN curl -sL --retry 3 -k "http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz" \
     | tar -xz -C /home/${HADOOP_USER}/ \
     && rm -rf ${HADOOP_HOME}/share/doc \
     && ln -s ${HADOOP_HOME} /home/${HADOOP_USER}/hadoop
@@ -72,7 +72,7 @@ RUN mkdir -p ${HADOOP_HOME}/hdfs/namenode \
     && chmod -R 755 ${HADOOP_HOME}/hdfs/
 
 # Download and install Hive
-RUN curl -sL --retry 3 "https://www-eu.apache.org/dist/hive/hive-${HIVE_VERSION}/apache-hive-${HIVE_VERSION}-bin.tar.gz" \
+RUN curl -sL --retry 3 -k "https://www-eu.apache.org/dist/hive/hive-${HIVE_VERSION}/apache-hive-${HIVE_VERSION}-bin.tar.gz" \
     | tar -xz -C /home/${HADOOP_USER}/ \
     && mv /home/${HADOOP_USER}/apache-hive-${HIVE_VERSION}-bin ${HIVE_HOME} \
     && ln -s ${HIVE_HOME} /home/${HADOOP_USER}/hive
@@ -92,7 +92,7 @@ RUN echo "" >> ${HIVE_HOME}/conf/hive-env.sh \
 RUN mkdir -p ${HIVE_HOME}/logs
 
 # Download and install Spark
-RUN curl -sL --retry 3 "https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.tgz" \
+RUN curl -sL --retry 3 -k "https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.tgz" \
     | tar -xz -C /home/${HADOOP_USER}/ \
     && mv /home/${HADOOP_USER}/spark-${SPARK_VERSION}-bin-hadoop3 ${SPARK_HOME} \
     && ln -s ${SPARK_HOME} /home/${HADOOP_USER}/spark
