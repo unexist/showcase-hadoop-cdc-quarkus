@@ -39,7 +39,7 @@ ENV PATH="${PATH}:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${HIVE_HOME}/bin:${SPAR
 COPY Makefile /home/${HADOOP_USER}
 
 # Download and install Hadoop
-RUN curl -sL --retry 3 -k "http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz" \
+RUN curl -sL --retry 3 "http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz" \
     | tar -xz -C /home/${HADOOP_USER}/ \
     && rm -rf ${HADOOP_HOME}/share/doc \
     && ln -s ${HADOOP_HOME} /home/${HADOOP_USER}/hadoop
@@ -72,7 +72,7 @@ RUN mkdir -p ${HADOOP_HOME}/hdfs/namenode \
     && chmod -R 755 ${HADOOP_HOME}/hdfs/
 
 # Download and install Hive
-RUN curl -sL --retry 3 -k "https://www-eu.apache.org/dist/hive/hive-${HIVE_VERSION}/apache-hive-${HIVE_VERSION}-bin.tar.gz" \
+RUN curl -sL --retry 3 "https://www-eu.apache.org/dist/hive/hive-${HIVE_VERSION}/apache-hive-${HIVE_VERSION}-bin.tar.gz" \
     | tar -xz -C /home/${HADOOP_USER}/ \
     && mv /home/${HADOOP_USER}/apache-hive-${HIVE_VERSION}-bin ${HIVE_HOME} \
     && ln -s ${HIVE_HOME} /home/${HADOOP_USER}/hive
@@ -80,7 +80,7 @@ RUN curl -sL --retry 3 -k "https://www-eu.apache.org/dist/hive/hive-${HIVE_VERSI
 COPY hive-site.xml ${HIVE_HOME}/conf/hive-site.xml
 
 # Add jars
-RUN curl -sL --retry 3 -k -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-hive-runtime/1.1.0/iceberg-hive-runtime-1.1.0.jar" \
+RUN curl -sL --retry 3 -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-hive-runtime/1.1.0/iceberg-hive-runtime-1.1.0.jar" \
     && mv iceberg-hive-runtime-1.1.0.jar ${HIVE_HOME}/lib/
 
 RUN echo "" >> ${HIVE_HOME}/conf/hive-env.sh \
@@ -92,7 +92,7 @@ RUN echo "" >> ${HIVE_HOME}/conf/hive-env.sh \
 RUN mkdir -p ${HIVE_HOME}/logs
 
 # Download and install Spark
-RUN curl -sL --retry 3 -k "https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.tgz" \
+RUN curl -sL --retry 3 "https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.tgz" \
     | tar -xz -C /home/${HADOOP_USER}/ \
     && mv /home/${HADOOP_USER}/spark-${SPARK_VERSION}-bin-hadoop3 ${SPARK_HOME} \
     && ln -s ${SPARK_HOME} /home/${HADOOP_USER}/spark
@@ -102,7 +102,7 @@ COPY slaves ${SPARK_HOME}/conf/
 COPY spark-defaults.conf ${SPARK_HOME}/conf/
 
 # Add jars
-RUN curl -sL --retry 3 -k -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.3_2.12/1.1.0/iceberg-spark-runtime-3.3_2.12-1.1.0.jar" \
+RUN curl -sL --retry 3 -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.3_2.12/1.1.0/iceberg-spark-runtime-3.3_2.12-1.1.0.jar" \
     && mv iceberg-spark-runtime-3.3_2.12-1.1.0.jar ${SPARK_HOME}/jars/
 
 # The file doesn't end on a blank line
