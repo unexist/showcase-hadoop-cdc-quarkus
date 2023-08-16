@@ -12,29 +12,21 @@
 package dev.unexist.showcase.todo.domain.todo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.NotBlank;
+
 import java.util.Objects;
 
-@MappedSuperclass
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TodoBase {
 
     @NotBlank
-    @Column
     private String title;
 
     @NotBlank
-    @Column
     private String description;
 
-    @Column
     private Boolean done;
 
-    @Embedded
     private DueDate dueDate;
 
     /**

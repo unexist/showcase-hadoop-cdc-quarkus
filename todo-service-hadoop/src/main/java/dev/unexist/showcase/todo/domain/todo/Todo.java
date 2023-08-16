@@ -11,26 +11,7 @@
 
 package dev.unexist.showcase.todo.domain.todo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedQueries;
-import jakarta.persistence.NamedQuery;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "Todos")
-@NamedQueries({
-        @NamedQuery(name = Todo.FIND_ALL, query = "SELECT t FROM Todo t"),
-        @NamedQuery(name = Todo.FIND_BY_ID, query = "SELECT t FROM Todo t WHERE t.id = :id")
-})
 public class Todo extends TodoBase {
-    public static final String FIND_ALL = "Todo.findAll";
-    public static final String FIND_BY_ID = "Todo.findById";
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
     /**
