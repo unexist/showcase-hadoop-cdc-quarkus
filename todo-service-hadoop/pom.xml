@@ -14,7 +14,7 @@
     </parent>
 
     <properties>
-        <hadoop-common.version>3.3.6</hadoop-common.version>
+        <hadoop.version>3.3.6</hadoop.version>
     </properties>
 
     <dependencies>
@@ -23,11 +23,18 @@
             <artifactId>quarkus-container-image-jib</artifactId>
         </dependency>
 
-        <!-- Database -->
+        <!-- Hadoop -->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-common</artifactId>
-            <version>${hadoop-common.version}</version>
+            <version>${hadoop.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-minicluster</artifactId>
+            <version>${hadoop.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
