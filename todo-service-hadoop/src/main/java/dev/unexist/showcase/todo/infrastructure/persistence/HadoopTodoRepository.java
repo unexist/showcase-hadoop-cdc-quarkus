@@ -13,52 +13,37 @@ package dev.unexist.showcase.todo.infrastructure.persistence;
 
 import dev.unexist.showcase.todo.domain.todo.Todo;
 import dev.unexist.showcase.todo.domain.todo.TodoRepository;
-
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
+import org.apache.commons.lang3.NotImplementedException;
+
 import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
 public class HadoopTodoRepository implements TodoRepository {
 
-    @Inject
-    EntityManager entityManager;
-
     @Override
     public boolean add(Todo todo) {
-        this.entityManager.persist(todo);
-
-        return true;
+        throw new NotImplementedException("Needs to be implemented later");
     }
 
     @Override
     public boolean update(Todo todo) {
-        this.entityManager.persist(todo);
-
-        return true;
+        throw new NotImplementedException("Needs to be implemented later");
     }
 
     @Override
     public boolean deleteById(int id) {
-        findById(id).ifPresent(todo -> this.entityManager.remove(todo));
-
-        return true;
+        throw new NotImplementedException("Needs to be implemented later");
     }
 
     @Override
     public List<Todo> getAll() {
-        return this.entityManager.createNamedQuery(Todo.FIND_ALL, Todo.class)
-                .getResultList();
+        throw new NotImplementedException("Needs to be implemented later");
     }
 
     @Override
     public Optional<Todo> findById(int id) {
-        return this.entityManager.createNamedQuery(Todo.FIND_BY_ID, Todo.class)
-                .setParameter("id", id)
-                .getResultList()
-                .stream()
-                .findFirst();
+        throw new NotImplementedException("Needs to be implemented later");
     }
 }
