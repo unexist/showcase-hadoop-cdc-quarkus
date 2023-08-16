@@ -15,5 +15,6 @@
 
     <modules>
         <module>todo-service-debezium</module>
+        <module>todo-service-hadoop</module>
     </modules>
 </project>
