@@ -11,20 +11,77 @@
 
 package dev.unexist.showcase.todo.infrastructure.persistence;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.unexist.showcase.todo.domain.todo.Todo;
 import dev.unexist.showcase.todo.domain.todo.TodoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.apache.commons.lang3.NotImplementedException;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
 public class HadoopTodoRepository implements TodoRepository {
+    private static final Logger LOGGER = LoggerFactory.getLogger(HadoopTodoRepository.class);
+
+    private final String HADOOP_FILE = "/warehouse/quarkus/todo.txt";
+
+    @ConfigProperty(name = "hadoop.defaultFS")
+    String defaultFS;
+
+    Configuration configuration;
+
+    @Inject
+    ObjectMapper mapper;
+
+    /**
+     * Constructor
+     */
+
+    public HadoopTodoRepository() {
+        this.configuration = new Configuration();
+
+        this.configuration.set("fs.defaultFS", this.defaultFS);
+    }
 
     @Override
     public boolean add(Todo todo) {
-        throw new NotImplementedException("Needs to be implemented later");
+        boolean retVal = true;
+
+        /* Append our todo as string */
+        try(FileSystem fileSystem = FileSystem.get(this.configuration)) {
+            Path hdfsPath = new Path(HADOOP_FILE);
+
+            FSDataOutputStream fsOut = fileSystem.append(hdfsPath);
+
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fsOut, StandardCharsets.UTF_8));
+
+            mapper.writeValue(bufferedWriter, todo);
+
+            bufferedWriter.close();
+        } catch (IOException e) {
+            LOGGER.error("Cannot write data to HDFS: ", e);
+
+            retVal = false;
+        }
+
+        return retVal;
     }
 
     @Override
@@ -39,7 +96,30 @@ public class HadoopTodoRepository implements TodoRepository {
 
     @Override
     public List<Todo> getAll() {
-        throw new NotImplementedException("Needs to be implemented later");
+        List<Todo> retVal = new java.util.ArrayList<>(Collections.emptyList());
+
+        try(FileSystem fileSystem = FileSystem.get(this.configuration)) {
+            Path hdfsPath = new Path(HADOOP_FILE);
+
+            FSDataInputStream inputStream = fileSystem.open(hdfsPath);
+
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+
+            String line = null;
+            while (null != (line = bufferedReader.readLine()))
+            {
+                LOGGER.debug("Read line: %s", line);
+
+                retVal.add(this.mapper.readValue(line, Todo.class));
+            }
+
+            inputStream.close();
+        } catch (IOException e) {
+            LOGGER.error("Cannot read data from HDFS: ", e);
+        }
+
+        return retVal;
     }
 
     @Override
