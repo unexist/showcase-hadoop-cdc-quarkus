@@ -12,6 +12,7 @@
 package dev.unexist.showcase.todo.infrastructure.persistence;
 
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
+import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hdfs.MiniDFSCluster;
 import org.slf4j.Logger;
@@ -56,11 +57,15 @@ public class HadoopResource implements QuarkusTestResourceLifecycleManager {
     @Override
     public void stop() {
         if (null != this.cluster) {
-            this.cluster.close();
+            this.cluster.shutdown();
         }
 
         if (null != this.baseDir) {
-            this.baseDir.delete();
+            try {
+                FileUtils.deleteDirectory(this.baseDir);
+            } catch (IOException e) {
+                /* Do nothing */
+            }
         }
     }
 }
