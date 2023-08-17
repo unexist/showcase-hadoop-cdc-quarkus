@@ -16,10 +16,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import dev.unexist.showcase.todo.infrastructure.serde.DateDeserializer;
 import dev.unexist.showcase.todo.infrastructure.serializer.DateSerializer;
 
-import jakarta.persistence.Embeddable;
 import java.time.LocalDate;
 
-@Embeddable
 public class DueDate {
     public static final String DATE_PATTERN = "yyyy-MM-dd";
 
