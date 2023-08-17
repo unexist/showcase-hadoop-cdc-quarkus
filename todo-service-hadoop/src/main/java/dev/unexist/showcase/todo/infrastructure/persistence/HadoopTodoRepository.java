@@ -1,7 +1,7 @@
 /**
  * @package Showcase-Hadoop-CDC-Quarkus
  *
- * @file Todo repository
+ * @file Todo Hadoop repository
  * @copyright 2023-present Christoph Kappel <christoph@unexist.dev>
  * @version $Id$
  *
@@ -45,16 +45,16 @@ public class HadoopTodoRepository implements TodoRepository {
     @ConfigProperty(name = "hadoop.defaultFS")
     String defaultFS;
 
-    Configuration configuration;
-
-    @Inject
     ObjectMapper mapper;
+
+    Configuration configuration;
 
     /**
      * Constructor
      */
 
     public HadoopTodoRepository() {
+        this.mapper = new ObjectMapper();
         this.configuration = new Configuration();
 
         this.configuration.set("fs.defaultFS", this.defaultFS);
@@ -62,7 +62,7 @@ public class HadoopTodoRepository implements TodoRepository {
 
     @Override
     public boolean add(Todo todo) {
-        boolean retVal = true;
+        boolean retVal = false;
 
         /* Append our todo as string */
         try(FileSystem fileSystem = FileSystem.get(this.configuration)) {
@@ -75,10 +75,10 @@ public class HadoopTodoRepository implements TodoRepository {
             mapper.writeValue(bufferedWriter, todo);
 
             bufferedWriter.close();
-        } catch (IOException e) {
-            LOGGER.error("Cannot write data to HDFS: ", e);
 
-            retVal = false;
+            retVal = true;
+        } catch (IOException e) {
+            LOGGER.error("Cannot write data to HDFS", e);
         }
 
         return retVal;
