@@ -54,14 +54,26 @@ Following make targets are available **here**:
 
 == How to use
 
-1. Start all container: `make pd-start`
-2. Init Hive tables: `make init`
-3. Compile and copy scala jar: `make copy`
-4. SSH into Hadoop pod: `make ssh`
-5. Copy scala jar to Hadoop: `make copy`
-6. Init Spark tables: `make init`
-7. Run scala jar: `make run`
-8. Create todo via curl: `make todo`
+=== Initial setup
+
+. Create podman machine: `make -C podman pd-machine-create`
+. Start podman machine: `make -C podman pd-machine-start`
+. Create pod: `make -C podman pd-pod-create`
+. Build all containers: `make -C podman pd-build`
+. Start all containers: `make -C podman pd-start`
+
+=== Start everything on host
+
+. Init Hive tables: `make init`
+. Compile scala jar: `make scala`
+. SSH into Hadoop pod: `make ssh`
+
+=== Run everything on ssh
+
+. Copy scala jar to Hadoop: `make copy`
+. Init Spark tables: `make init`
+. Run scala jar: `make run`
+. Create todo via curl: `make todo`
 
 == Problems
 
