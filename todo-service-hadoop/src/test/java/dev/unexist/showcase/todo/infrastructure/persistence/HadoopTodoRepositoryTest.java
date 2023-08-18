@@ -24,7 +24,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
-@QuarkusTestResource(value = HadoopResource.class, restrictToAnnotatedClass = true)
+@QuarkusTestResource(value = HadoopTestResource.class, restrictToAnnotatedClass = true)
 public class HadoopTodoRepositoryTest {
 
     @Inject
