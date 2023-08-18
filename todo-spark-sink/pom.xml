@@ -25,6 +25,22 @@
         <spark-2.12.version>3.3.1</spark-2.12.version>
     </properties>
 
+
+    <licenses>
+        <license>
+            <name>Apache License v2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>unexist</id>
+            <organization>unexist.dev</organization>
+        </developer>
+    </developers>
+
     <dependencies>
         <!-- Spark -->
         <dependency>
