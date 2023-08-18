@@ -14,10 +14,20 @@
     </parent>
 
     <properties>
+        <!-- Overwrite Quarkus version to avoid Jetty/Jakarta problems in Hadoop -->
+        <slf4j.version>1.7.36</slf4j.version>
+        <quarkus.version>2.16.9.Final</quarkus.version>
+
         <hadoop.version>3.3.6</hadoop.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>jaxrs-api</artifactId>
+            <version>3.0.10.Final</version>
+        </dependency>
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-container-image-jib</artifactId>
