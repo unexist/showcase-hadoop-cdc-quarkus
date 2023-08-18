@@ -24,8 +24,8 @@ import java.nio.file.Files;
 import java.util.Collections;
 import java.util.Map;
 
-public class HadoopResource implements QuarkusTestResourceLifecycleManager {
-    private static final Logger LOGGER = LoggerFactory.getLogger(HadoopResource.class);
+public class HadoopTestResource implements QuarkusTestResourceLifecycleManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(HadoopTestResource.class);
 
     private File baseDir;
     private MiniDFSCluster cluster;
