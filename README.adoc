@@ -136,6 +136,16 @@ Spark executors use submitted values for JAVA_HOME:
 
 https://github.com/LucaCanali/Miscellaneous/blob/master/Spark_Notes/Spark_Set_Java_Home_Howto.md
 
+== Hadoop
+
+Hadoop includes a Jakarta enabled version of Jetty, but still in v3.3.6 many of the servlets
+implement interfaces of `javax.servlets.*` and this doesn't work in a Jakarta project.
+
+[source,text]
+----
+java.lang.RuntimeException: java.lang.NoSuchMethodError: 'void org.eclipse.jetty.servlet.ServletHolder.<init>(javax.servlet.Servlet)'
+----
+
 == Links
 
 === Hadoop
