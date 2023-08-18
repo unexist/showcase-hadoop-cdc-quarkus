@@ -25,6 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -36,6 +37,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
+@Named("hadoop_plain")
 public class HadoopTodoRepository implements TodoRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(HadoopTodoRepository.class);
 
