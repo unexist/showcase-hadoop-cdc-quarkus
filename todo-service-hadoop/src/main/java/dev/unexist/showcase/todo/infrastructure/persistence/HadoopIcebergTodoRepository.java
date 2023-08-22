@@ -68,8 +68,13 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
         /* Append our todo as string */
         try(FileSystem fileSystem = FileSystem.get(this.configuration)) {
             Path hdfsPath = new Path(HADOOP_FILE);
+            FSDataOutputStream fsOut;
 
-            FSDataOutputStream fsOut = fileSystem.append(hdfsPath);
+            if (fileSystem.exists(hdfsPath)) {
+                fsOut = fileSystem.append(hdfsPath);
+            } else {
+                fsOut = fileSystem.create(hdfsPath);
+            }
 
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fsOut, StandardCharsets.UTF_8));
 
