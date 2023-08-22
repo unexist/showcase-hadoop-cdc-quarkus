@@ -43,7 +43,7 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
 
     private final String HADOOP_FILE = "/warehouse/quarkus/todo.txt";
 
-    @ConfigProperty(name = "hadoop.defaultFS")
+    @ConfigProperty(name = "hadoop.defaultFS", defaultValue = "")
     String defaultFS;
 
     ObjectMapper mapper;
@@ -54,7 +54,7 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
      * Constructor
      */
 
-    public HadoopIcebergTodoRepository() {
+    public HadoopIcebergTodoRepository(@ConfigProperty(name = "hadoop.defaultFS", defaultValue = "") String defaultFS) {
         this.mapper = new ObjectMapper();
         this.configuration = new Configuration();
 

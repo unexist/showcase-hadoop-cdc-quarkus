@@ -33,13 +33,13 @@ public class HadoopIcebergTodoRepositoryTest {
 
     @Test
     public void shouldAddToAndGetFromRepository() {
-        Todo todo_in = TodoFixture.createTodo();
+        Todo todo = TodoFixture.createTodo();
 
-        assertThat(this.repository.add(todo_in)).isTrue();
+        assertThat(this.repository.add(todo)).isTrue();
 
         List<Todo> allTodos = this.repository.getAll();
 
         assertThat(allTodos).hasSize(1);
-        assertThat(todo_in).isEqualTo(allTodos.get(0));
+        assertThat(todo).isEqualTo(allTodos.get(0));
     }
 }
