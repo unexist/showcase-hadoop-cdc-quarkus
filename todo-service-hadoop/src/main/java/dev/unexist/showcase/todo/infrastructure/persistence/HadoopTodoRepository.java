@@ -43,9 +43,6 @@ public class HadoopTodoRepository implements TodoRepository {
 
     private final String HADOOP_FILE = "/warehouse/quarkus/todo.txt";
 
-    @ConfigProperty(name = "hadoop.defaultFS")
-    String defaultFS;
-
     ObjectMapper mapper;
 
     Configuration configuration;
@@ -54,11 +51,11 @@ public class HadoopTodoRepository implements TodoRepository {
      * Constructor
      */
 
-    public HadoopTodoRepository() {
+    public HadoopTodoRepository(@ConfigProperty(name = "hadoop.defaultFS", defaultValue = "") String defaultFS) {
         this.mapper = new ObjectMapper();
         this.configuration = new Configuration();
 
-        this.configuration.set("fs.defaultFS", this.defaultFS);
+        this.configuration.set("fs.defaultFS", defaultFS);
     }
 
     @Override
@@ -68,8 +65,13 @@ public class HadoopTodoRepository implements TodoRepository {
         /* Append our todo as string */
         try(FileSystem fileSystem = FileSystem.get(this.configuration)) {
             Path hdfsPath = new Path(HADOOP_FILE);
+            FSDataOutputStream fsOut;
 
-            FSDataOutputStream fsOut = fileSystem.append(hdfsPath);
+            if (fileSystem.exists(hdfsPath)) {
+                fsOut = fileSystem.append(hdfsPath);
+            } else {
+                fsOut = fileSystem.create(hdfsPath);
+            }
 
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fsOut, StandardCharsets.UTF_8));
 
