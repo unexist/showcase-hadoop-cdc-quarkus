@@ -40,11 +40,9 @@ import java.util.Optional;
 @Named("hadoop_plain")
 public class HadoopTodoRepository implements TodoRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(HadoopTodoRepository.class);
-
-    private final String HADOOP_FILE = "/warehouse/quarkus/todo.txt";
+    private final String HADOOP_FILE = "/warehouse/quarkus/plain/todo";
 
     ObjectMapper mapper;
-
     Configuration configuration;
 
     /**
