@@ -76,11 +76,15 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
                 fsOut = fileSystem.create(hdfsPath);
             }
 
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fsOut, StandardCharsets.UTF_8));
+            OutputStreamWriter outStreamWriter = new OutputStreamWriter(fsOut, StandardCharsets.UTF_8);
+
+            BufferedWriter bufferedWriter = new BufferedWriter(outStreamWriter);
 
             mapper.writeValue(bufferedWriter, todo);
 
             bufferedWriter.close();
+            outStreamWriter.close();
+            fsOut.close();
 
             retVal = true;
         } catch (IOException e) {
