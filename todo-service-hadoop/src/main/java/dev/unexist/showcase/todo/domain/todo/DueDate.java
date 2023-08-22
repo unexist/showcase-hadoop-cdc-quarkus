@@ -17,6 +17,7 @@ import dev.unexist.showcase.todo.infrastructure.serde.DateDeserializer;
 import dev.unexist.showcase.todo.infrastructure.serializer.DateSerializer;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class DueDate {
     public static final String DATE_PATTERN = "yyyy-MM-dd";
@@ -67,5 +68,20 @@ public class DueDate {
 
     public void setDue(LocalDate due) {
         this.due = due;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DueDate dueDate = (DueDate) o;
+
+        return Objects.equals(start, dueDate.start) && Objects.equals(due, dueDate.due);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(start, due);
     }
 }

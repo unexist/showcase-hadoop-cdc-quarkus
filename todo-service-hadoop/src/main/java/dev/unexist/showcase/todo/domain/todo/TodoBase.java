@@ -115,4 +115,24 @@ public class TodoBase {
             this.done = dueDate.getStart().isBefore(dueDate.getDue());
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        System.out.println("DAFUQ?");
+
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TodoBase todoBase = (TodoBase) o;
+
+        return Objects.equals(title, todoBase.title)
+                && Objects.equals(description, todoBase.description)
+                && Objects.equals(done, todoBase.done)
+                && Objects.equals(dueDate, todoBase.dueDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, done, dueDate);
+    }
 }

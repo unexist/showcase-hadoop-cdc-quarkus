@@ -11,6 +11,8 @@
 
 package dev.unexist.showcase.todo.domain.todo;
 
+import java.util.Objects;
+
 public class Todo extends TodoBase {
     private int id;
 
@@ -65,5 +67,21 @@ public class Todo extends TodoBase {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Todo todo = (Todo) o;
+
+        return id == todo.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), id);
     }
 }
