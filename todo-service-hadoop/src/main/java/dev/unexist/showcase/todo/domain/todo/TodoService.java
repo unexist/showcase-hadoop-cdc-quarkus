@@ -14,7 +14,6 @@ package dev.unexist.showcase.todo.domain.todo;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +32,6 @@ public class TodoService {
      * @return Either id of the entry on success; otherwise {@code -1}
      **/
 
-    @Transactional
     public Optional<Todo> create(TodoBase base) {
         Todo todo = new Todo(base);
 
