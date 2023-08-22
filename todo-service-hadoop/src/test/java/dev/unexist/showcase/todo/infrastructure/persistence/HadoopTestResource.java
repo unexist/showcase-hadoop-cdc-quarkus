@@ -47,6 +47,8 @@ public class HadoopTestResource implements QuarkusTestResourceLifecycleManager {
 
             retVal = Map.of("hadoop.defaultFS",
                     String.format("hdfs://localhost:%d", this.cluster.getNameNodePort()));
+
+            LOGGER.info(String.format("Cluster is ready: %s", retVal.get("hadoop.defaultFS")));
         } catch (IOException e) {
             LOGGER.error("Cannot create mini cluster ", e);
         }
