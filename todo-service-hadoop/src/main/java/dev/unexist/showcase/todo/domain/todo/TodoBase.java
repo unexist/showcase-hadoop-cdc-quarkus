@@ -118,8 +118,6 @@ public class TodoBase {
 
     @Override
     public boolean equals(Object o) {
-        System.out.println("DAFUQ?");
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
