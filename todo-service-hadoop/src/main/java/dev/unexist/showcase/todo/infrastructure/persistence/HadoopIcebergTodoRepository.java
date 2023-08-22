@@ -16,39 +16,31 @@ import dev.unexist.showcase.todo.domain.todo.Todo;
 import dev.unexist.showcase.todo.domain.todo.TodoRepository;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataInputStream;
-import org.apache.hadoop.fs.FSDataOutputStream;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
+import org.apache.iceberg.PartitionSpec;
+import org.apache.iceberg.Schema;
+import org.apache.iceberg.Table;
+import org.apache.iceberg.hadoop.HadoopTables;
+import org.apache.iceberg.types.Types;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static org.apache.iceberg.types.Types.NestedField.optional;
 
 @ApplicationScoped
 @Named("hadoop_iceberg")
 public class HadoopIcebergTodoRepository implements TodoRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(HadoopIcebergTodoRepository.class);
-
-    private final String HADOOP_FILE = "/warehouse/quarkus/todo.txt";
-
-    @ConfigProperty(name = "hadoop.defaultFS", defaultValue = "")
-    String defaultFS;
+    private final String HADOOP_FILE = "/warehouse/quarkus/iceberg/todo";
 
     ObjectMapper mapper;
-
     Configuration configuration;
+    Schema todoSchema;
 
     /**
      * Constructor
@@ -56,40 +48,29 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
 
     public HadoopIcebergTodoRepository(@ConfigProperty(name = "hadoop.defaultFS", defaultValue = "") String defaultFS) {
         this.mapper = new ObjectMapper();
+
+        /* Hadoop configuration */
         this.configuration = new Configuration();
 
-        this.configuration.set("fs.defaultFS", this.defaultFS);
+        this.configuration.set("fs.defaultFS", defaultFS);
+
+        /* Iceberg configuration */
+        this.todoSchema = new Schema(optional(1, "id", Types.IntegerType.get()),
+                optional(2, "title", Types.StringType.get()),
+                optional(3, "description", Types.StringType.get()),
+                optional(4, "done", Types.BooleanType.get()));
     }
 
     @Override
     public boolean add(Todo todo) {
         boolean retVal = false;
 
-        /* Append our todo as string */
-        try(FileSystem fileSystem = FileSystem.get(this.configuration)) {
-            Path hdfsPath = new Path(HADOOP_FILE);
-            FSDataOutputStream fsOut;
+        PartitionSpec todoSpec = PartitionSpec.builderFor(this.todoSchema)
+                .identity("id").build();
 
-            if (fileSystem.exists(hdfsPath)) {
-                fsOut = fileSystem.append(hdfsPath);
-            } else {
-                fsOut = fileSystem.create(hdfsPath);
-            }
+        HadoopTables tables = new HadoopTables(this.configuration);
 
-            OutputStreamWriter outStreamWriter = new OutputStreamWriter(fsOut, StandardCharsets.UTF_8);
-
-            BufferedWriter bufferedWriter = new BufferedWriter(outStreamWriter);
-
-            mapper.writeValue(bufferedWriter, todo);
-
-            bufferedWriter.close();
-            outStreamWriter.close();
-            fsOut.close();
-
-            retVal = true;
-        } catch (IOException e) {
-            LOGGER.error("Cannot write data to HDFS", e);
-        }
+        Table table = tables.create(this.todoSchema, todoSpec, HADOOP_FILE);
 
         return retVal;
     }
@@ -106,30 +87,7 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
 
     @Override
     public List<Todo> getAll() {
-        List<Todo> retVal = new java.util.ArrayList<>(Collections.emptyList());
-
-        try(FileSystem fileSystem = FileSystem.get(this.configuration)) {
-            Path hdfsPath = new Path(HADOOP_FILE);
-
-            FSDataInputStream inputStream = fileSystem.open(hdfsPath);
-
-            BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-
-            String line = null;
-            while (null != (line = bufferedReader.readLine()))
-            {
-                LOGGER.debug("Read line: %s", line);
-
-                retVal.add(this.mapper.readValue(line, Todo.class));
-            }
-
-            inputStream.close();
-        } catch (IOException e) {
-            LOGGER.error("Cannot read data from HDFS: ", e);
-        }
-
-        return retVal;
+        throw new NotImplementedException("Needs to be implemented later");
     }
 
     @Override
