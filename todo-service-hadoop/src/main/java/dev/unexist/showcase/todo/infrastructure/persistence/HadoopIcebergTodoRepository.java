@@ -12,6 +12,8 @@
 package dev.unexist.showcase.todo.infrastructure.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import dev.unexist.showcase.todo.domain.todo.Todo;
 import dev.unexist.showcase.todo.domain.todo.TodoRepository;
 import org.apache.commons.lang3.NotImplementedException;
@@ -19,7 +21,12 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.iceberg.PartitionSpec;
 import org.apache.iceberg.Schema;
 import org.apache.iceberg.Table;
+import org.apache.iceberg.data.GenericRecord;
+import org.apache.iceberg.data.parquet.GenericParquetWriter;
 import org.apache.iceberg.hadoop.HadoopTables;
+import org.apache.iceberg.io.DataWriter;
+import org.apache.iceberg.io.OutputFile;
+import org.apache.iceberg.parquet.Parquet;
 import org.apache.iceberg.types.Types;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
@@ -27,8 +34,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.apache.iceberg.types.Types.NestedField.optional;
 
@@ -72,6 +81,35 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
 
         Table table = tables.create(this.todoSchema, todoSpec, HADOOP_FILE);
 
+        /*GenericRecord record = GenericRecord.create(this.todoSchema);
+
+        ImmutableList.Builder<GenericRecord> builder = ImmutableList.builder();
+
+        builder.add(this.convertTodoToRecord(record, todo);
+
+        ImmutableList<GenericRecord> records = builder.build();*/
+
+        String filepath = String.format("%s/%s", table.location(), UUID.randomUUID());
+
+        OutputFile file = table.io().newOutputFile(filepath);
+
+        try {
+            DataWriter<GenericRecord> dataWriter = Parquet.writeData(file)
+                        .schema(this.todoSchema)
+                        .createWriterFunc(GenericParquetWriter::buildWriter)
+                        .overwrite()
+                        .withSpec(todoSpec)
+                        .build();
+
+            dataWriter.write(this.convertTodoToRecord(todo));
+
+            dataWriter.close();
+
+            retVal = true;
+        } catch (IOException e) {
+            LOGGER.error("Cannot write data to HDFS", e);
+        }
+
         return retVal;
     }
 
@@ -93,5 +131,14 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
     @Override
     public Optional<Todo> findById(int id) {
         throw new NotImplementedException("Needs to be implemented later");
+    }
+
+    private GenericRecord convertTodoToRecord(Todo todo) {
+        GenericRecord record = GenericRecord.create(this.todoSchema);
+
+        return record.copy(ImmutableMap.of("id", todo.getId() ,
+                "title", todo.getTitle(),
+                "description", todo.getDescription(),
+                "done", todo.getDone()));
     }
 }
