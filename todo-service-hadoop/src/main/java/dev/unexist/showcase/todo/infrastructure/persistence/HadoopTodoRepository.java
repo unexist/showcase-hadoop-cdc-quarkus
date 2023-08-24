@@ -103,7 +103,7 @@ public class HadoopTodoRepository implements TodoRepository {
     public List<Todo> getAll() {
         List<Todo> retVal = new java.util.ArrayList<>(Collections.emptyList());
 
-        try(FileSystem fileSystem = FileSystem.get(this.configuration)) {
+        try (FileSystem fileSystem = FileSystem.get(this.configuration)) {
             Path hdfsPath = new Path(HADOOP_FILE);
 
             FSDataInputStream inputStream = fileSystem.open(hdfsPath);
@@ -112,8 +112,7 @@ public class HadoopTodoRepository implements TodoRepository {
                     new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 
             String line = null;
-            while (null != (line = bufferedReader.readLine()))
-            {
+            while (null != (line = bufferedReader.readLine())) {
                 LOGGER.debug("Read line: %s", line);
 
                 retVal.add(this.mapper.readValue(line, Todo.class));
