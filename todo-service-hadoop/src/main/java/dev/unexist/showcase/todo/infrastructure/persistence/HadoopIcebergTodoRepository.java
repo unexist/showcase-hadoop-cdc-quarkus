@@ -18,6 +18,7 @@ import dev.unexist.showcase.todo.domain.todo.Todo;
 import dev.unexist.showcase.todo.domain.todo.TodoRepository;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.iceberg.DataFile;
 import org.apache.iceberg.PartitionSpec;
 import org.apache.iceberg.Schema;
 import org.apache.iceberg.Table;
@@ -25,6 +26,7 @@ import org.apache.iceberg.data.GenericRecord;
 import org.apache.iceberg.data.parquet.GenericParquetWriter;
 import org.apache.iceberg.hadoop.HadoopTables;
 import org.apache.iceberg.io.DataWriter;
+import org.apache.iceberg.io.FileIO;
 import org.apache.iceberg.io.OutputFile;
 import org.apache.iceberg.parquet.Parquet;
 import org.apache.iceberg.types.Types;
@@ -91,10 +93,8 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
 
         String filepath = String.format("%s/%s", table.location(), UUID.randomUUID());
 
-        OutputFile file = table.io().newOutputFile(filepath);
-
-        try {
-            DataWriter<GenericRecord> dataWriter = Parquet.writeData(file)
+        try (FileIO fileIO = table.io()) {
+            DataWriter<GenericRecord> dataWriter = Parquet.writeData(fileIO.newOutputFile(filepath))
                         .schema(this.todoSchema)
                         .createWriterFunc(GenericParquetWriter::buildWriter)
                         .overwrite()
@@ -102,12 +102,13 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
                         .build();
 
             dataWriter.write(this.convertTodoToRecord(todo));
-
             dataWriter.close();
+
+            table.newAppend().appendFile(dataWriter.toDataFile());
 
             retVal = true;
         } catch (IOException e) {
-            LOGGER.error("Cannot write data to HDFS", e);
+            LOGGER.error("Cannot write Iceberg data to HDFS", e);
         }
 
         return retVal;
