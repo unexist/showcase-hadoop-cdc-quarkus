@@ -21,8 +21,11 @@ import org.apache.iceberg.PartitionSpec;
 import org.apache.iceberg.Schema;
 import org.apache.iceberg.Table;
 import org.apache.iceberg.data.GenericRecord;
+import org.apache.iceberg.data.IcebergGenerics;
+import org.apache.iceberg.data.Record;
 import org.apache.iceberg.data.parquet.GenericParquetWriter;
 import org.apache.iceberg.hadoop.HadoopTables;
+import org.apache.iceberg.io.CloseableIterable;
 import org.apache.iceberg.io.DataWriter;
 import org.apache.iceberg.io.FileIO;
 import org.apache.iceberg.parquet.Parquet;
@@ -34,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -49,6 +53,7 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
     ObjectMapper mapper;
     Configuration configuration;
     Schema todoSchema;
+    Table todoTable;
 
     /**
      * Constructor
@@ -67,27 +72,19 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
                 optional(2, "title", Types.StringType.get()),
                 optional(3, "description", Types.StringType.get()),
                 optional(4, "done", Types.BooleanType.get()));
+
+        HadoopTables tables = new HadoopTables(this.configuration);
+
+        this.todoTable = tables.create(this.todoSchema, PartitionSpec.unpartitioned(), HADOOP_FILE);
     }
 
     @Override
     public boolean add(Todo todo) {
         boolean retVal = false;
 
-        HadoopTables tables = new HadoopTables(this.configuration);
+        String filepath = String.format("%s/%s", todoTable.location(), UUID.randomUUID());
 
-        Table table = tables.create(this.todoSchema, PartitionSpec.unpartitioned(), HADOOP_FILE);
-
-        /*GenericRecord record = GenericRecord.create(this.todoSchema);
-
-        ImmutableList.Builder<GenericRecord> builder = ImmutableList.builder();
-
-        builder.add(this.convertTodoToRecord(record, todo);
-
-        ImmutableList<GenericRecord> records = builder.build();*/
-
-        String filepath = String.format("%s/%s", table.location(), UUID.randomUUID());
-
-        try (FileIO fileIO = table.io()) {
+        try (FileIO fileIO = todoTable.io()) {
             DataWriter<GenericRecord> dataWriter = Parquet.writeData(fileIO.newOutputFile(filepath))
                         .schema(this.todoSchema)
                         .createWriterFunc(GenericParquetWriter::buildWriter)
@@ -97,7 +94,7 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
             dataWriter.write(this.convertTodoToRecord(todo));
             dataWriter.close();
 
-            table.newAppend().appendFile(dataWriter.toDataFile());
+            todoTable.newAppend().appendFile(dataWriter.toDataFile());
 
             retVal = true;
         } catch (IOException e) {
@@ -119,7 +116,15 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
 
     @Override
     public List<Todo> getAll() {
-        throw new NotImplementedException("Needs to be implemented later");
+        List<Todo> retVal = Collections.emptyList();
+
+        CloseableIterable<Record> result = IcebergGenerics.read(this.todoTable).build();
+
+        for (Record r: result) {
+            System.out.println(r);
+        }
+
+        return retVal;
     }
 
     @Override
