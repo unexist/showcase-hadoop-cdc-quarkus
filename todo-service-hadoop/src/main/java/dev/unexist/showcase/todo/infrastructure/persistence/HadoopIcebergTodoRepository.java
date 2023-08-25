@@ -12,13 +12,11 @@
 package dev.unexist.showcase.todo.infrastructure.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import dev.unexist.showcase.todo.domain.todo.Todo;
 import dev.unexist.showcase.todo.domain.todo.TodoRepository;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.hadoop.conf.Configuration;
-import org.apache.iceberg.DataFile;
 import org.apache.iceberg.PartitionSpec;
 import org.apache.iceberg.Schema;
 import org.apache.iceberg.Table;
@@ -27,7 +25,6 @@ import org.apache.iceberg.data.parquet.GenericParquetWriter;
 import org.apache.iceberg.hadoop.HadoopTables;
 import org.apache.iceberg.io.DataWriter;
 import org.apache.iceberg.io.FileIO;
-import org.apache.iceberg.io.OutputFile;
 import org.apache.iceberg.parquet.Parquet;
 import org.apache.iceberg.types.Types;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -76,12 +73,9 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
     public boolean add(Todo todo) {
         boolean retVal = false;
 
-        PartitionSpec todoSpec = PartitionSpec.builderFor(this.todoSchema)
-                .identity("id").build();
-
         HadoopTables tables = new HadoopTables(this.configuration);
 
-        Table table = tables.create(this.todoSchema, todoSpec, HADOOP_FILE);
+        Table table = tables.create(this.todoSchema, PartitionSpec.unpartitioned(), HADOOP_FILE);
 
         /*GenericRecord record = GenericRecord.create(this.todoSchema);
 
@@ -97,8 +91,7 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
             DataWriter<GenericRecord> dataWriter = Parquet.writeData(fileIO.newOutputFile(filepath))
                         .schema(this.todoSchema)
                         .createWriterFunc(GenericParquetWriter::buildWriter)
-                        .overwrite()
-                        .withSpec(todoSpec)
+                        .withSpec(PartitionSpec.unpartitioned())
                         .build();
 
             dataWriter.write(this.convertTodoToRecord(todo));
