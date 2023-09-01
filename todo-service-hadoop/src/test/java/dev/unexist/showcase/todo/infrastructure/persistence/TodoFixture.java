@@ -11,30 +11,15 @@
 
 package dev.unexist.showcase.todo.infrastructure.persistence;
 
-import dev.unexist.showcase.todo.domain.todo.DueDate;
 import dev.unexist.showcase.todo.domain.todo.Todo;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import dev.unexist.showcase.todo.domain.todo.TodoFactory;
 
 public class TodoFixture {
+    private static final String DATE = "2021-05-07";
+
     public static Todo createTodo() {
-        Todo todo = new Todo();
-
-        todo.setId(0);
-        todo.setTitle("string");
-        todo.setDescription("string");
-
-        DueDate dueDate = new DueDate();
-
-        LocalDate date = LocalDate.from(
-                DateTimeFormatter.ofPattern(DueDate.DATE_PATTERN).parse("2021-05-07"));
-
-        dueDate.setStart(date);
-        dueDate.setDue(date);
-
-        todo.setDueDate(dueDate);
-
-        return todo;
+        return TodoFactory.createTodoFromData(0,
+                "string", "string", false,
+                DATE, DATE);
     }
 }
