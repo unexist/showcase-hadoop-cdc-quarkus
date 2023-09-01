@@ -13,7 +13,9 @@ package dev.unexist.showcase.todo.infrastructure.persistence;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
+import dev.unexist.showcase.todo.domain.todo.DueDate;
 import dev.unexist.showcase.todo.domain.todo.Todo;
+import dev.unexist.showcase.todo.domain.todo.TodoFactory;
 import dev.unexist.showcase.todo.domain.todo.TodoRepository;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.hadoop.conf.Configuration;
@@ -37,12 +39,15 @@ import org.slf4j.LoggerFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.apache.iceberg.types.Types.NestedField.optional;
+import static org.apache.iceberg.types.Types.NestedField.required;
 
 @ApplicationScoped
 @Named("hadoop_iceberg")
@@ -68,10 +73,13 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
         this.configuration.set("fs.defaultFS", defaultFS);
 
         /* Iceberg configuration */
-        this.todoSchema = new Schema(optional(1, "id", Types.IntegerType.get()),
-                optional(2, "title", Types.StringType.get()),
+        this.todoSchema = new Schema(
+                required(1, "id", Types.IntegerType.get()),
+                required(2, "title", Types.StringType.get()),
                 optional(3, "description", Types.StringType.get()),
-                optional(4, "done", Types.BooleanType.get()));
+                required(4, "done", Types.BooleanType.get()),
+                optional(5, "start_date", Types.StringType.get()),
+                optional(6, "due_date", Types.StringType.get()));
 
         HadoopTables tables = new HadoopTables(this.configuration);
 
@@ -94,7 +102,7 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
             dataWriter.write(this.convertTodoToRecord(todo));
             dataWriter.close();
 
-            todoTable.newAppend().appendFile(dataWriter.toDataFile());
+            todoTable.newAppend().appendFile(dataWriter.toDataFile()).commit();
 
             retVal = true;
         } catch (IOException e) {
@@ -116,12 +124,22 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
 
     @Override
     public List<Todo> getAll() {
-        List<Todo> retVal = Collections.emptyList();
+        List<Todo> retVal = new java.util.ArrayList<>();
 
-        CloseableIterable<Record> result = IcebergGenerics.read(this.todoTable).build();
+        try (CloseableIterable<Record> records = IcebergGenerics.read(this.todoTable).build()) {
+            for (Record r : records) {
+                LOGGER.debug(r.toString());
 
-        for (Record r: result) {
-            System.out.println(r);
+                retVal.add(TodoFactory.createTodoFromData(
+                        r.get(0, Integer.class),
+                        r.get(1, String.class),
+                        r.get(2, String.class),
+                        r.get(3, Boolean.class),
+                        r.get(4, String.class),
+                        r.get(5, String.class)));
+            }
+        } catch (IOException e) {
+            LOGGER.error("Cannot read Iceberg data from HDFS: ", e);
         }
 
         return retVal;
@@ -132,12 +150,26 @@ public class HadoopIcebergTodoRepository implements TodoRepository {
         throw new NotImplementedException("Needs to be implemented later");
     }
 
+    /**
+     * Convert {@link Todo} to a {@link GenericRecord}
+     *
+     * @param  todo  A {@link Todo} to convert
+     *
+     * @return A newly created {@link GenericRecord}
+     **/
+
     private GenericRecord convertTodoToRecord(Todo todo) {
+        Objects.requireNonNull(todo, "Todo cannot be null");
+
         GenericRecord record = GenericRecord.create(this.todoSchema);
 
         return record.copy(ImmutableMap.of("id", todo.getId() ,
                 "title", todo.getTitle(),
                 "description", todo.getDescription(),
-                "done", todo.getDone()));
+                "done", todo.getDone(),
+                "start_date", todo.getDueDate().getStart()
+                        .format(DateTimeFormatter.ofPattern(DueDate.DATE_PATTERN)),
+                "due_date", todo.getDueDate().getStart()
+                        .format(DateTimeFormatter.ofPattern(DueDate.DATE_PATTERN))));
     }
 }
