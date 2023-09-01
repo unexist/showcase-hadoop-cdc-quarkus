@@ -32,18 +32,6 @@ public class HadoopTodoRepositoryTest {
     TodoRepository repository;
 
     @Test
-    public void shouldCreateAndFetchFromRepository() {
-        Todo todo = TodoFixture.createTodo();
-
-        assertThat(this.repository.add(todo)).isTrue();
-
-        List<Todo> allTodos = this.repository.getAll();
-
-        assertThat(allTodos).hasSize(1);
-        assertThat(todo).isEqualTo(allTodos.get(0));
-    }
-
-    @Test
     public void shouldCreateAndFetchMultipleFromRepository() {
         Todo todo = TodoFixture.createTodo();
 
