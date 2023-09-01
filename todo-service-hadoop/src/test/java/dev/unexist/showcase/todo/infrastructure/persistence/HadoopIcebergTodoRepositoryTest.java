@@ -41,7 +41,7 @@ public class HadoopIcebergTodoRepositoryTest {
 
         List<Todo> allTodos = this.repository.getAll();
 
-        assertThat(allTodos).hasSize(2);
+        assertThat(allTodos).hasSize(3);
         assertThat(todo).isEqualTo(allTodos.get(0))
                 .isEqualTo(allTodos.get(1))
                 .isEqualTo(allTodos.get(2));
