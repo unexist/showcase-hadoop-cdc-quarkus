@@ -101,7 +101,7 @@ public class HadoopTodoRepository implements TodoRepository {
 
     @Override
     public List<Todo> getAll() {
-        List<Todo> retVal = new java.util.ArrayList<>(Collections.emptyList());
+        List<Todo> retVal = new java.util.ArrayList<>();
 
         try (FileSystem fileSystem = FileSystem.get(this.configuration)) {
             Path hdfsPath = new Path(HADOOP_FILE);
