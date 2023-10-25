@@ -54,6 +54,7 @@ public class HadoopTodoRepository implements TodoRepository {
         this.configuration = new Configuration();
 
         this.configuration.set("fs.defaultFS", defaultFS);
+        this.configuration.set("dfs.replication", "1");
     }
 
     @Override
