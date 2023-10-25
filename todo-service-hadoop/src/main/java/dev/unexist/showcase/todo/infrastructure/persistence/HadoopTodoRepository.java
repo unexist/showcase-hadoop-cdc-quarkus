@@ -76,7 +76,8 @@ public class HadoopTodoRepository implements TodoRepository {
 
             BufferedWriter bufferedWriter = new BufferedWriter(outStreamWriter);
 
-            mapper.writeValue(bufferedWriter, todo);
+            bufferedWriter.write(mapper.writeValueAsString(todo));
+            bufferedWriter.newLine();
 
             bufferedWriter.close();
             outStreamWriter.close();
