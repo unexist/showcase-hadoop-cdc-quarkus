@@ -62,7 +62,7 @@ public class HadoopTodoRepository implements TodoRepository {
         boolean retVal = false;
 
         /* Append our todo as string */
-        try(FileSystem fileSystem = FileSystem.get(this.configuration)) {
+        try (FileSystem fileSystem = FileSystem.get(this.configuration)) {
             Path hdfsPath = new Path(HADOOP_FILE);
             FSDataOutputStream fsOut;
 
@@ -120,6 +120,7 @@ public class HadoopTodoRepository implements TodoRepository {
                 retVal.add(this.mapper.readValue(line, Todo.class));
             }
 
+            bufferedReader.close();
             inputStream.close();
         } catch (IOException e) {
             LOGGER.error("Cannot read data from HDFS: ", e);
