@@ -22,7 +22,6 @@
         <timestamp>${maven.build.timestamp}</timestamp>
 
         <hadoop.version>3.3.6</hadoop.version>
-        <rest-assured.version>5.3.0</rest-assured.version>
         <assertj-core.version>3.24.2</assertj-core.version>
         <jaxb.version>4.0.3</jaxb.version>
         <mrunit.version>1.1.0</mrunit.version>
@@ -60,6 +59,13 @@
             <artifactId>hadoop-mapreduce-client-common</artifactId>
             <version>${hadoop.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.mrunit</groupId>
+            <artifactId>mrunit</artifactId>
+            <version>${mrunit.version}</version>
+            <classifier>hadoop2</classifier>
+            <scope>test</scope>
+        </dependency>
 
         <!-- Fix missing AnnotationReader for Hadoop
              https://stackoverflow.com/questions/36557308/caused-by-java-lang-classnotfoundexception-com-sun-xml-bind-v2-model-annotatio -->
@@ -75,37 +81,12 @@
             <version>${jaxb.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.mrunit</groupId>
-            <artifactId>mrunit</artifactId>
-            <version>${mrunit.version}</version>
-            <classifier>hadoop2</classifier>
-            <scope>test</scope>
-        </dependency>
 
         <!-- Testing -->
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <version>${rest-assured.version}</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>${assertj-core.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.10.19</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.8.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
