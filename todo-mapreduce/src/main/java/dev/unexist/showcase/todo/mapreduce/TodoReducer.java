@@ -9,7 +9,7 @@
  * See the file LICENSE for details.
  **/
 
-package todo.showcase.unexist.dev.mapreduce;
+package dev.unexist.showcase.todo.mapreduce;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;

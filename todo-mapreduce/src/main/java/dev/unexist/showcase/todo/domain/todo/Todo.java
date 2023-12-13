@@ -9,7 +9,7 @@
  * See the file LICENSE for details.
  **/
 
-package todo.showcase.unexist.dev.domain.todo;
+package dev.unexist.showcase.todo.domain.todo;
 
 import java.util.Objects;
 

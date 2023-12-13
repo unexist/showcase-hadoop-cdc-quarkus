@@ -9,23 +9,32 @@
  * See the file LICENSE for details.
  **/
 
-package todo.showcase.unexist.dev.mapreduce;
+package dev.unexist.showcase.todo.mapreduce;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
+import dev.unexist.showcase.todo.domain.todo.Todo;
+
+import java.util.stream.Stream;
 
 public class TodoMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
     private Text status = new Text();
     private final static IntWritable addOne = new IntWritable(1);
+    private ObjectMapper mapper = new ObjectMapper();
 
     protected void map(LongWritable key, Text value, Context context)
             throws java.io.IOException, InterruptedException {
 
-        //655209;1;796764372490213;804422938115889;6 is the Sample record format
-        String[] line = value.toString().split(";");
-        // If record is of SMS CDR
+        /* Sample record format:
+         * {"title":"string","description":"string","done":false,"dueDate":{"start":"2021-05-07","due":"2021-05-07"},"id":0}
+         */
+        Stream<String> lines = value.toString().lines();
+
+        lines.map(todo -> { this.mapper.readValue(todo, Todo.class) })
+
         if (Integer.parseInt(line[1]) == 1) {
             status.set(line[4]);
             context.write(status, addOne);
