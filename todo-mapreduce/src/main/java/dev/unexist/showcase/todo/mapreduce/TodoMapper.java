@@ -11,33 +11,39 @@
 
 package dev.unexist.showcase.todo.mapreduce;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.unexist.showcase.todo.domain.todo.DueDate;
+import dev.unexist.showcase.todo.domain.todo.Todo;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
-import dev.unexist.showcase.todo.domain.todo.Todo;
 
-import java.util.stream.Stream;
+import java.time.format.DateTimeFormatter;
 
 public class TodoMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
-    private Text status = new Text();
     private final static IntWritable addOne = new IntWritable(1);
+
+    private Text dueDate = new Text();
     private ObjectMapper mapper = new ObjectMapper();
 
+    enum TodoCounter {
+       TotalError;
+     };
+
     protected void map(LongWritable key, Text value, Context context)
-            throws java.io.IOException, InterruptedException {
+            throws java.io.IOException, InterruptedException
+    {
+        try {
+            Todo todo = this.mapper.readValue(value.toString(), Todo.class);
 
-        /* Sample record format:
-         * {"title":"string","description":"string","done":false,"dueDate":{"start":"2021-05-07","due":"2021-05-07"},"id":0}
-         */
-        Stream<String> lines = value.toString().lines();
+            dueDate.set(todo.getDueDate().getDue()
+                    .format(DateTimeFormatter.ofPattern(DueDate.DATE_PATTERN)));
 
-        lines.map(todo -> { this.mapper.readValue(todo, Todo.class) })
-
-        if (Integer.parseInt(line[1]) == 1) {
-            status.set(line[4]);
-            context.write(status, addOne);
+            context.write(dueDate, addOne);
+        } catch (JsonProcessingException e) {
+            context.getCounter(TodoCounter.TotalError).increment(1);
         }
     }
 }

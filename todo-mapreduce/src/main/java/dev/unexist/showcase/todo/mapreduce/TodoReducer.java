@@ -18,11 +18,14 @@ import org.apache.hadoop.mapreduce.Reducer;
 public class TodoReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
 
     protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws java.io.IOException,
-            InterruptedException {
+            InterruptedException
+    {
         int sum = 0;
+
         for (IntWritable value : values) {
             sum += value.get();
         }
+
         context.write(key, new IntWritable(sum));
     }
 }
