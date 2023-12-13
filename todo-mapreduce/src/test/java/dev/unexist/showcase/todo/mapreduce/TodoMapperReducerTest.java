@@ -11,14 +11,12 @@
 
 package dev.unexist.showcase.todo.mapreduce;
 
-import dev.unexist.showcase.todo.mapreduce.TodoMapper;
-import dev.unexist.showcase.todo.mapreduce.TodoReducer;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mrunit.mapreduce.MapDriver;
 import org.apache.hadoop.mrunit.mapreduce.MapReduceDriver;
 import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
-import org.apache.hadoop.mrunit.mapreduce.MapDriver;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +24,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class TodoMapperReducerTest {
+    final static String RECORD =
+            "{\"title\":\"string\",\"description\":\"string\",\"done\":false,\"dueDate\":{\"start\":\"2021-05-07\",\"due\":\"2021-05-07\"},\"id\":0}";
+
     MapDriver<LongWritable, Text, Text, IntWritable> mapDriver;
     ReduceDriver<Text, IntWritable, Text, IntWritable> reduceDriver;
     MapReduceDriver<LongWritable, Text, Text, IntWritable, Text, IntWritable> mapReduceDriver;
@@ -43,9 +46,8 @@ public class TodoMapperReducerTest {
 
     @Test
     public void testMapper() throws IOException {
-        mapDriver.withInput(new LongWritable(), new Text(
-                "655209;1;796764372490213;804422938115889;6"));
-        mapDriver.withOutput(new Text("6"), new IntWritable(1));
+        mapDriver.withInput(new LongWritable(), new Text(RECORD));
+        mapDriver.withOutput(new Text("2021-05-07"), new IntWritable(1));
         mapDriver.runTest();
     }
 
@@ -56,22 +58,30 @@ public class TodoMapperReducerTest {
         values.add(new IntWritable(1));
         values.add(new IntWritable(1));
 
-        reduceDriver.withInput(new Text("6"), values);
-        reduceDriver.withOutput(new Text("6"), new IntWritable(2));
+        reduceDriver.withInput(new Text("2021-05-07"), values);
+        reduceDriver.withOutput(new Text("2021-05-07"), new IntWritable(2));
         reduceDriver.runTest();
     }
 
     @Test
     public void testMapReduce() throws IOException {
-        mapReduceDriver.withInput(new LongWritable(), new Text(
-                "655209;1;796764372490213;804422938115889;6"));
+        mapReduceDriver.withInput(new LongWritable(), new Text(RECORD));
 
         List<IntWritable> values = new ArrayList<IntWritable>();
 
         values.add(new IntWritable(1));
         values.add(new IntWritable(1));
 
-        mapReduceDriver.withOutput(new Text("6"), new IntWritable(2));
+        mapReduceDriver.withOutput(new Text("2021-05-07"), new IntWritable(2));
         mapReduceDriver.runTest();
+    }
+
+    @Test
+    public void testCounter() throws IOException {
+        mapDriver.withInput(new LongWritable(), new Text(RECORD));
+        mapDriver.runTest();
+
+        assertThat(mapDriver.getCounters()
+                        .findCounter(TodoMapper.TodoCounter.TotalError).getValue()).isEqualTo(1);
     }
 }
