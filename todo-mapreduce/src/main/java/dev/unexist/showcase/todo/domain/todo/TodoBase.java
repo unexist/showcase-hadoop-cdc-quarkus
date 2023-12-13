@@ -13,16 +13,13 @@ package dev.unexist.showcase.todo.domain.todo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class TodoBase {
 
-    @NotBlank
     private String title;
 
-    @NotBlank
     private String description;
 
     private Boolean done;
