@@ -23,10 +23,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 import java.time.format.DateTimeFormatter;
 
 public class TodoMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
-    private final static IntWritable addOne = new IntWritable(1);
-
-    private Text dueDate = new Text();
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     enum TodoCounter {
        TotalError;
@@ -38,10 +35,10 @@ public class TodoMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
         try {
             Todo todo = this.mapper.readValue(value.toString(), Todo.class);
 
-            dueDate.set(todo.getDueDate().getDue()
-                    .format(DateTimeFormatter.ofPattern(DueDate.DATE_PATTERN)));
+            String formattedDate = todo.getDueDate().getDue()
+                    .format(DateTimeFormatter.ofPattern(DueDate.DATE_PATTERN));
 
-            context.write(dueDate, addOne);
+            context.write(new Text(formattedDate), new IntWritable(todo.getId()));
         } catch (JsonProcessingException e) {
             context.getCounter(TodoCounter.TotalError).increment(1);
         }
