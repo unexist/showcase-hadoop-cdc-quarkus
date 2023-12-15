@@ -27,12 +27,14 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TodoMapperReducerTest {
-    final static String RECORD =
-            "{\"title\":\"string\",\"description\":\"string\",\"done\":false,\"dueDate\":{\"start\":\"2021-05-07\",\"due\":\"2021-05-07\"},\"id\":0}";
+    final static String[] RECORD = {
+            "{\"title\":\"string\",\"description\":\"string\",\"done\":false,\"dueDate\":{\"start\":\"2021-05-07\",\"due\":\"2021-05-07\"},\"id\":0}",
+            "{\"title\":\"string\",\"description\":\"string\",\"done\":false,\"dueDate\":{\"start\":\"2021-05-07\",\"due\":\"2021-05-07\"},\"id\":2}"
+    };
 
     MapDriver<LongWritable, Text, Text, IntWritable> mapDriver;
-    ReduceDriver<Text, IntWritable, Text, IntWritable> reduceDriver;
-    MapReduceDriver<LongWritable, Text, Text, IntWritable, Text, IntWritable> mapReduceDriver;
+    ReduceDriver<Text, IntWritable, Text, TodoReducer.IntArrayWritable> reduceDriver;
+    MapReduceDriver<LongWritable, Text, Text, IntWritable, Text, TodoReducer.IntArrayWritable> mapReduceDriver;
 
     @Before
     public void setUp() {
@@ -46,8 +48,8 @@ public class TodoMapperReducerTest {
 
     @Test
     public void shouldVerifyMapper() throws IOException {
-        mapDriver.withInput(new LongWritable(), new Text(RECORD));
-        mapDriver.withOutput(new Text("2021-05-07"), new IntWritable(1));
+        mapDriver.withInput(new LongWritable(), new Text(RECORD[0]));
+        mapDriver.withOutput(new Text("2021-05-07"), new IntWritable(0));
         mapDriver.runTest();
     }
 
@@ -55,30 +57,33 @@ public class TodoMapperReducerTest {
     public void shouldVerifyReducer() throws IOException {
         List<IntWritable> values = new ArrayList<IntWritable>();
 
-        values.add(new IntWritable(1));
+        values.add(new IntWritable(0));
         values.add(new IntWritable(1));
 
         reduceDriver.withInput(new Text("2021-05-07"), values);
-        reduceDriver.withOutput(new Text("2021-05-07"), new IntWritable(2));
+        reduceDriver.withOutput(new Text("2021-05-07"),
+                new TodoReducer.IntArrayWritable(new IntWritable[] {
+                        new IntWritable(0), new IntWritable(1)
+                }));
         reduceDriver.runTest();
     }
 
     @Test
     public void shouldVerfiyMapAndReduce() throws IOException {
-        mapReduceDriver.withInput(new LongWritable(), new Text(RECORD));
+        mapReduceDriver.withInput(new LongWritable(), new Text(RECORD[0]));
+        mapReduceDriver.withInput(new LongWritable(), new Text(RECORD[1]));
 
-        List<IntWritable> values = new ArrayList<IntWritable>();
 
-        values.add(new IntWritable(1));
-        values.add(new IntWritable(1));
-
-        mapReduceDriver.withOutput(new Text("2021-05-07"), new IntWritable(1));
+        mapReduceDriver.withOutput(new Text("2021-05-07"),
+                new TodoReducer.IntArrayWritable(new IntWritable[] {
+                        new IntWritable(0)
+                }));
         mapReduceDriver.runTest();
     }
 
     @Test
     public void shouldVerifyEmptyCounter() throws IOException {
-        mapDriver.withInput(new LongWritable(), new Text(RECORD));
+        mapDriver.withInput(new LongWritable(), new Text(RECORD[0]));
         mapDriver.withOutput(new Text("2021-05-07"), new IntWritable(1));
         mapDriver.runTest();
 
