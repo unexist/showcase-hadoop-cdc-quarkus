@@ -36,8 +36,12 @@ public class TodoReducer extends Reducer<Text, IntWritable, Text, TodoReducer.In
     }
 
     public static class IntArrayWritable extends ArrayWritable {
-        public IntArrayWritable(IntWritable[] intWritables) {
+        public IntArrayWritable() {
             super(IntWritable.class);
+        }
+
+        public IntArrayWritable(IntWritable[] intWritables) {
+            super(IntWritable.class, intWritables);
         }
 
         @Override
