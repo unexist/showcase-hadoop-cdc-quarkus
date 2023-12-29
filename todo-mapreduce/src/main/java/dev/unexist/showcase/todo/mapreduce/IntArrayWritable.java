@@ -11,14 +11,14 @@
 
 package dev.unexist.showcase.todo.mapreduce;
 
-import dev.unexist.showcase.todo.domain.todo.TodoBase;
+import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.WritableComparable;
+import org.apache.hadoop.io.Writable;
 
-import java.util.Objects;
+import java.util.Arrays;
 
-public class IntArrayWritable extends ArrayWritable implements WritableComparable {
+public class IntArrayWritable extends ArrayWritable {
     public IntArrayWritable() {
         super(IntWritable.class);
     }
@@ -40,13 +40,15 @@ public class IntArrayWritable extends ArrayWritable implements WritableComparabl
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        System.out.println("equals");
-        return super.equals(o);
-    }
+        Writable[] mine = (Writable[]) this.toArray();
+        Writable[] theirs = (Writable[]) ((IntArrayWritable)o).toArray();
 
-    @Override
-    public int compareTo(Object o) {
-        System.out.println("compareTo");
-        return 0;
+        if (mine.length != theirs.length) return false;
+
+        for (int i = 0; i < mine.length; i++) {
+            if (((IntWritable)mine[i]).get() != ((IntWritable)theirs[i]).get()) return false;
+        }
+
+        return true;
     }
 }
