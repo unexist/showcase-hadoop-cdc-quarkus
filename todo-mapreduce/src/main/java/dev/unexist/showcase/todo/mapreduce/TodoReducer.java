@@ -30,6 +30,6 @@ public class TodoReducer extends Reducer<Text, IntWritable, Text, IntArrayWritab
             idList.add(value.get());
         }
 
-        context.write(key, new IntArrayWritable(idList.toArray(new Integer[0])));
+        context.write(key, new IntArrayWritable(idList.toArray(Integer[]::new)));
     }
 }
