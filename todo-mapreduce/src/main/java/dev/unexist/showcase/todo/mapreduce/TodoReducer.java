@@ -11,49 +11,25 @@
 
 package dev.unexist.showcase.todo.mapreduce;
 
-import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-import java.io.DataOutput;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class TodoReducer extends Reducer<Text, IntWritable, Text, TodoReducer.IntArrayWritable> {
+public class TodoReducer extends Reducer<Text, IntWritable, Text, IntArrayWritable> {
 
     protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws java.io.IOException,
             InterruptedException
     {
-        List<IntWritable> ids = new ArrayList<>();
+        List<Integer> idList = new ArrayList<>();
 
         for (IntWritable value : values) {
-            ids.add(value);
+            idList.add(value.get());
         }
 
-        context.write(key, new IntArrayWritable(ids.toArray(IntWritable[]::new)));
-    }
-
-    public static class IntArrayWritable extends ArrayWritable {
-        public IntArrayWritable() {
-            super(IntWritable.class);
-        }
-
-        public IntArrayWritable(IntWritable[] intWritables) {
-            super(IntWritable.class, intWritables);
-        }
-
-        @Override
-        public IntWritable[] get() {
-            return (IntWritable[]) super.get();
-        }
-
-        @Override
-        public void write(DataOutput dataOutput) throws IOException {
-            for(IntWritable data : get()){
-                data.write(dataOutput);
-            }
-        }
+        context.write(key, new IntArrayWritable(idList.toArray(new Integer[0])));
     }
 }
