@@ -78,7 +78,7 @@ public class TodoMapperReducerTest {
     @Test
     public void shouldVerifyEmptyCounter() throws IOException {
         mapDriver.withInput(new LongWritable(), new Text(RECORD[0]));
-        mapDriver.withOutput(new Text("2021-05-07"), new IntWritable(1));
+        mapDriver.withOutput(new Text("2021-05-07"), new IntWritable(0));
         mapDriver.runTest();
 
         assertThat(mapDriver.getCounters()
