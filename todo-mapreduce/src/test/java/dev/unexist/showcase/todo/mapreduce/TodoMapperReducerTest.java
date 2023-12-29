@@ -33,8 +33,8 @@ public class TodoMapperReducerTest {
     };
 
     MapDriver<LongWritable, Text, Text, IntWritable> mapDriver;
-    ReduceDriver<Text, IntWritable, Text, TodoReducer.IntArrayWritable> reduceDriver;
-    MapReduceDriver<LongWritable, Text, Text, IntWritable, Text, TodoReducer.IntArrayWritable> mapReduceDriver;
+    ReduceDriver<Text, IntWritable, Text, IntArrayWritable> reduceDriver;
+    MapReduceDriver<LongWritable, Text, Text, IntWritable, Text, IntArrayWritable> mapReduceDriver;
 
     @Before
     public void setUp() {
@@ -62,7 +62,7 @@ public class TodoMapperReducerTest {
 
         reduceDriver.withInput(new Text("2021-05-07"), values);
         reduceDriver.withOutput(new Text("2021-05-07"),
-                new TodoReducer.IntArrayWritable(new IntWritable[] {
+                new IntArrayWritable(new IntWritable[] {
                         new IntWritable(0), new IntWritable(1)
                 }));
         reduceDriver.runTest();
@@ -75,7 +75,7 @@ public class TodoMapperReducerTest {
 
 
         mapReduceDriver.withOutput(new Text("2021-05-07"),
-                new TodoReducer.IntArrayWritable(new IntWritable[] {
+                new IntArrayWritable(new IntWritable[] {
                         new IntWritable(0)
                 }));
         mapReduceDriver.runTest();
