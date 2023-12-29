@@ -61,9 +61,7 @@ public class TodoMapperReducerTest {
                 )
         );
         reduceDriver.withOutput(new Text("2021-05-07"),
-                new IntArrayWritable(new IntWritable[]{
-                        new IntWritable(0), new IntWritable(1)
-                }));
+                new IntArrayWritable(new Integer[] { 0, 1 }));
         reduceDriver.runTest();
     }
 
@@ -73,9 +71,7 @@ public class TodoMapperReducerTest {
         mapReduceDriver.withInput(new LongWritable(), new Text(RECORD[1]));
 
         mapReduceDriver.withOutput(new Text("2021-05-07"),
-                new IntArrayWritable(new IntWritable[]{
-                        new IntWritable(0), new IntWritable(1)
-                }));
+                new IntArrayWritable(new Integer[] { 0, 1}));
         mapReduceDriver.runTest();
     }
 
