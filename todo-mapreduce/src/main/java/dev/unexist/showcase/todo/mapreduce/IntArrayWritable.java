@@ -11,15 +11,42 @@
 
 package dev.unexist.showcase.todo.mapreduce;
 
+import dev.unexist.showcase.todo.domain.todo.TodoBase;
 import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.WritableComparable;
 
-public class IntArrayWritable extends ArrayWritable {
+import java.util.Objects;
+
+public class IntArrayWritable extends ArrayWritable implements WritableComparable {
     public IntArrayWritable() {
         super(IntWritable.class);
     }
 
-    public IntArrayWritable(IntWritable[] values) {
-        super(IntWritable.class, values);
+    public IntArrayWritable(Integer[] values) {
+        super(IntWritable.class);
+
+        IntWritable[] ints = new IntWritable[values.length];
+
+        for (int i = 0; i < values.length; i++) {
+            ints[i] = new IntWritable(values[i]);
+        }
+
+        set(ints);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        System.out.println("equals");
+        return super.equals(o);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        System.out.println("compareTo");
+        return 0;
     }
 }
