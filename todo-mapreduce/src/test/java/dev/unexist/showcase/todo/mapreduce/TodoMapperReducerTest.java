@@ -1,12 +1,12 @@
 /**
  * @package Showcase-Hadoop-CDC-Quarkus
- *
  * @file Mapper and Reducer Test
  * @copyright 2023-present Christoph Kappel <christoph@unexist.dev>
- * @version $Id$
+ * @version $Id: todo-mapreduce/src/test/java/dev/unexist/showcase/todo/mapreduce/TodoMapperReducerTest.java,v
+ *         303 2023/12/29 14:48:37 unexist $
  *
- * This program can be distributed under the terms of the Apache License v2.0.
- * See the file LICENSE for details.
+ *         This program can be distributed under the terms of the Apache License v2.0.
+ *         See the file LICENSE for details.
  **/
 
 package dev.unexist.showcase.todo.mapreduce;
@@ -21,15 +21,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TodoMapperReducerTest {
     final static String[] RECORD = {
-            "{\"title\":\"string\",\"description\":\"string\",\"done\":false,\"dueDate\":{\"start\":\"2021-05-07\",\"due\":\"2021-05-07\"},\"id\":0}",
-            "{\"title\":\"string\",\"description\":\"string\",\"done\":false,\"dueDate\":{\"start\":\"2021-05-07\",\"due\":\"2021-05-07\"},\"id\":2}"
+            "{\"title\":\"string\",\"description\":\"string\",\"done\":false,\"dueDate\":{\"start\":\"2021-05-07\"," +
+                    "\"due\":\"2021-05-07\"},\"id\":0}",
+            "{\"title\":\"string\",\"description\":\"string\",\"done\":false,\"dueDate\":{\"start\":\"2021-05-07\"," +
+                    "\"due\":\"2021-05-07\"},\"id\":1}"
     };
 
     MapDriver<LongWritable, Text, Text, IntWritable> mapDriver;
@@ -55,14 +56,12 @@ public class TodoMapperReducerTest {
 
     @Test
     public void shouldVerifyReducer() throws IOException {
-        List<IntWritable> values = new ArrayList<IntWritable>();
-
-        values.add(new IntWritable(0));
-        values.add(new IntWritable(1));
-
-        reduceDriver.withInput(new Text("2021-05-07"), values);
+        reduceDriver.withInput(new Text("2021-05-07"), Arrays.asList(
+                        new IntWritable(0), new IntWritable(1)
+                )
+        );
         reduceDriver.withOutput(new Text("2021-05-07"),
-                new IntArrayWritable(new IntWritable[] {
+                new IntArrayWritable(new IntWritable[]{
                         new IntWritable(0), new IntWritable(1)
                 }));
         reduceDriver.runTest();
@@ -73,10 +72,9 @@ public class TodoMapperReducerTest {
         mapReduceDriver.withInput(new LongWritable(), new Text(RECORD[0]));
         mapReduceDriver.withInput(new LongWritable(), new Text(RECORD[1]));
 
-
         mapReduceDriver.withOutput(new Text("2021-05-07"),
-                new IntArrayWritable(new IntWritable[] {
-                        new IntWritable(0)
+                new IntArrayWritable(new IntWritable[]{
+                        new IntWritable(0), new IntWritable(1)
                 }));
         mapReduceDriver.runTest();
     }
@@ -88,8 +86,8 @@ public class TodoMapperReducerTest {
         mapDriver.runTest();
 
         assertThat(mapDriver.getCounters()
-                        .findCounter(TodoMapper.TodoCounter.TotalError).getValue())
-            .isEqualTo(0)
+                .findCounter(TodoMapper.TodoCounter.TotalError).getValue())
+                .isEqualTo(0)
                 .withFailMessage("Expected 0 counter increment");
     }
 }
