@@ -37,8 +37,8 @@ public class IntArrayWritable extends ArrayWritable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Writable[] mine = (Writable[]) this.toArray();
-        Writable[] theirs = (Writable[]) ((IntArrayWritable)o).toArray();
+        Writable[] mine = this.get();
+        Writable[] theirs = ((ArrayWritable)o).get();
 
         if (mine.length != theirs.length) return false;
 
