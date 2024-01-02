@@ -11,12 +11,9 @@
 
 package dev.unexist.showcase.todo.mapreduce;
 
-import org.apache.curator.framework.recipes.locks.InterProcessReadWriteLock;
 import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Writable;
-
-import java.util.Arrays;
 
 public class IntArrayWritable extends ArrayWritable {
     public IntArrayWritable() {
