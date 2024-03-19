@@ -19,13 +19,13 @@ import org.apache.spark.sql.streaming.Trigger
 
 import java.util.concurrent.TimeUnit
 
-object TodoSparkSink {
+object TodoSparkSinkIceberg {
   def main(args: Array[String]): Unit = {
 
     /* Configure parameters */
     val sparkConf = new SparkConf()
 
-    sparkConf.set("packages", "org.apache.iceberg:iceberg-spark-runtime-3.3_2.13:1.1.0,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.1")
+    sparkConf.set("packages", "org.apache.iceberg:iceberg-spark-runtime-3.5_2.13:1.1.0,org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1")
     sparkConf.set("spark.sql.catalog.todo_catalog", "org.apache.iceberg.spark.SparkCatalog")
     sparkConf.set("spark.sql.catalog.todo_catalog.type", "hadoop")
     sparkConf.set("spark.sql.catalog.todo_catalog.warehouse", "hdfs://localhost:9000/warehouse")
