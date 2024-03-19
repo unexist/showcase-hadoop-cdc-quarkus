@@ -22,7 +22,7 @@
         <timestamp>${maven.build.timestamp}</timestamp>
 
         <scala-maven-plugin.version>4.8.0</scala-maven-plugin.version>
-        <spark-2.12.version>3.3.1</spark-2.12.version>
+        <spark-2.12.version>3.5.1</spark-2.12.version>
     </properties>
 
 
@@ -80,9 +80,9 @@
                 <configuration>
                     <javacArgs>
                         <javacArg>-source</javacArg>
-                        <javacArg>${java.version}</javacArg>
+                        <javacArg>${maven.compiler.source}</javacArg>
                         <javacArg>-target</javacArg>
-                        <javacArg>${java.version}</javacArg>
+                        <javacArg>${maven.compiler.target}</javacArg>
                     </javacArgs>
                 </configuration>
             </plugin>
