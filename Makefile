@@ -103,15 +103,27 @@ spark-shell:
 
 spark-submit:
 	@spark-submit --master spark://localhost:7077 \
-	--packages org.apache.iceberg:iceberg-spark-runtime-3.3_2.12:1.1.0,org.apache.spark:spark-sql-kafka-0-10_2.12:3.3.2 \
+	--packages org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.1.0,org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1 \
 	--conf spark.executorEnv.JAVA_HOME=/opt/java/openjdk \
 	--conf spark.yarn.appMasterEnv.JAVA_HOME=/opt/java/openjdk \
 	--conf spark.sql.streaming.checkpointLocation=/tmp/checkpoint \
 	--name todosink \
 	--deploy-mode $(SPARK_DEPLOY_MODE) \
 	--num-executors 1 \
-	--class dev.unexist.showcase.todo.TodoSparkSink \
+	--class dev.unexist.showcase.todo.TodoSparkSinkIceberg \
 	hdfs://localhost:9000/jars/todo-spark-sink-0.1.jar
+
+spark-submit-local:
+	@spark-submit --master spark://localhost:7077 \
+	--packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.1 \
+	--conf spark.executorEnv.JAVA_HOME=/opt/java/openjdk \
+	--conf spark.yarn.appMasterEnv.JAVA_HOME=/opt/java/openjdk \
+	--conf spark.sql.streaming.checkpointLocation=/tmp/checkpoint \
+	--name todosink \
+	--deploy-mode client \
+	--num-executors 1 \
+	--class dev.unexist.showcase.todo.TodoSparkSinkSimple \
+	./todo-spark-sink/target/todo-spark-sink-0.1.jar
 
 spark-status:
 	@spark-submit --master spark://localhost:7077 --status $(ID)
