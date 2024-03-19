@@ -1,4 +1,4 @@
-FROM eclipse-temurin:8-jdk
+FROM docker.io/eclipse-temurin:8-jdk
 
 MAINTAINER Christoph Kappel <christoph@unexist.dev>
 
@@ -31,8 +31,11 @@ ENV HADOOP_HOME="/home/${HADOOP_USER}/hadoop-${HADOOP_VERSION}"
 ENV HIVE_VERSION="3.1.3"
 ENV HIVE_HOME="/home/${HADOOP_USER}/hive-${HIVE_VERSION}"
 
-ENV SPARK_VERSION="3.3.2"
+ENV SPARK_VERSION="3.4.2"
 ENV SPARK_HOME="/home/${HADOOP_USER}/spark-${SPARK_VERSION}"
+
+ENV ICEBERG_VERSION="1.3.0"
+ENV ICEBERG_SPARK_VERSION="3.4"
 
 ENV PATH="${PATH}:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:${HIVE_HOME}/bin:${SPARK_HOME}/bin"
 
@@ -80,8 +83,8 @@ RUN curl -sL --retry 3 "https://www-eu.apache.org/dist/hive/hive-${HIVE_VERSION}
 COPY hive-site.xml ${HIVE_HOME}/conf/hive-site.xml
 
 # Add jars
-RUN curl -sL --retry 3 -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-hive-runtime/1.1.0/iceberg-hive-runtime-1.1.0.jar" \
-    && mv iceberg-hive-runtime-1.1.0.jar ${HIVE_HOME}/lib/
+RUN curl -sL --retry 3 -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-hive-runtime/${ICEBERG_VERSION}/iceberg-hive-runtime-${ICEBERG_VERSION}.jar" \
+    && mv iceberg-hive-runtime-${ICEBERG_VERSION}.jar ${HIVE_HOME}/lib/
 
 RUN echo "" >> ${HIVE_HOME}/conf/hive-env.sh \
     && echo "export JAVA_HOME=\"${JAVA_HOME}\"" >> ${HIVE_HOME}/conf/hive-env.sh \
@@ -97,13 +100,13 @@ RUN curl -sL --retry 3 "https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/sp
     && mv /home/${HADOOP_USER}/spark-${SPARK_VERSION}-bin-hadoop3 ${SPARK_HOME} \
     && ln -s ${SPARK_HOME} /home/${HADOOP_USER}/spark
 
-COPY spark-env.sh ${SPARK_HOME}/conf/
+COPY --chmod=0553 spark-env.sh ${SPARK_HOME}/conf/
 COPY slaves ${SPARK_HOME}/conf/
-COPY spark-defaults.conf ${SPARK_HOME}/conf/
+COPY --chmod=0553 spark-defaults.conf ${SPARK_HOME}/conf/
 
 # Add jars
-RUN curl -sL --retry 3 -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.3_2.12/1.1.0/iceberg-spark-runtime-3.3_2.12-1.1.0.jar" \
-    && mv iceberg-spark-runtime-3.3_2.12-1.1.0.jar ${SPARK_HOME}/jars/
+RUN curl -sL --retry 3 -O "https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-${ICEBERG_SPARK_VERSION}_2.12/${ICEBERG_VERSION}/iceberg-spark-runtime-${ICEBERG_SPARK_VERSION}_2.12-${ICEBERG_VERSION}.jar" \
+    && mv iceberg-spark-runtime-${ICEBERG_SPARK_VERSION}_2.12-${ICEBERG_VERSION}.jar ${SPARK_HOME}/jars/
 
 # The file doesn't end on a blank line
 RUN echo "" >> ${SPARK_HOME}/conf/spark-env.sh \

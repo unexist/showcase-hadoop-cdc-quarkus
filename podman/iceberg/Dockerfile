@@ -1,4 +1,4 @@
-FROM eclipse-temurin:11-jdk as builder
+FROM docker.io/eclipse-temurin:11-jdk as builder
 
 MAINTAINER Christoph Kappel <christoph@unexist.dev>
 
@@ -12,7 +12,7 @@ WORKDIR /app
 RUN mvn clean package -Passembly -Dmaven.test.skip \
     && unzip /app/debezium-server-iceberg-dist/target/debezium-server-iceberg-dist*.zip -d appdist
 
-FROM eclipse-temurin:11-jre
+FROM docker.io/eclipse-temurin:11-jre
 
 COPY --from=builder /app/appdist/debezium-server-iceberg/ /app/
 COPY --from=builder /app/application.properties /app/conf/application.properties
