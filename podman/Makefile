@@ -20,7 +20,8 @@ pd-pod-create:
 # 6066 = Spark REST port
 # 7077 = Spark master port
 # 8088 = Hadoop Resource Manager
-# 8080 = Quarkus
+# 8080 = Quarkus/Spark master
+# 8081 = Spark worker
 # 8090 = Iceberg
 # 9088 =
 # 9000 =
@@ -37,7 +38,9 @@ pd-pod-create:
 # 50030 = Jobtracker port
 	@podman pod create -n $(PODNAME) --network bridge \
 		-p 5432:5432 \
+		-p 7070:7070 \
 		-p 8080:8080 \
+		-p 8081:8081 \
 		-p 8090:8090 \
 		-p 9092:9092 \
 		-p 4040:4040 -p 4041:4041 -p 6066:6066 -p 7077:7077 -p 8020:8020 -p 8088:8088 -p 9000:9000 -p 9083:9083 -p 9864:9864 -p 9870:9870 -p 9999:9999 -p 10000:10000 -p 50030:50030
@@ -60,10 +63,13 @@ pd-postgres-build:
 pd-hadoop-hive-spark-build:
 	@podman build --format docker -t custom-hadoop-hive-spark -f hadoop_hive_spark/Dockerfile
 
+pd-spark-build:
+	@podman build --format docker -t custom-spark -f spark/Dockerfile
+
 pd-quarkus-build:
 	mvn -f ../todo-service-debezium/pom.xml clean package -Dquarkus.container-image.build=true #-Dquarkus.container-image.push=true
 
-pd-build: pd-iceberg-build pd-postgres-build pd-hadoop-hive-spark-build pd-quarkus-build
+pd-build: pd-iceberg-build pd-postgres-build pd-hadoop-hive-spark-build pd-spark-build pd-quarkus-build
 
 pd-postgres:
 	@podman run -dit --name postgres --pod=$(PODNAME) \
@@ -79,6 +85,9 @@ pd-hadoop:
 
 pd-hadoop-hive-spark:
 	@podman run -dit --name hadoop-hive-spark-single --cap-add SYS_CHROOT --pod=$(PODNAME) custom-hadoop-hive-spark:latest
+
+pd-spark:
+	@podman run -dit --name spark-single --cap-add SYS_CHROOT --pod=$(PODNAME) custom-spark:latest
 
 pd-redpanda:
 	@podman run -dit --name redpanda --pod=$(PODNAME) vectorized/redpanda
