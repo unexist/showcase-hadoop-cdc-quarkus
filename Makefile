@@ -21,6 +21,10 @@ curl -X 'POST' \
 endef
 export JSON_TODO
 
+define JSON_TODO_KAFKA
+endef
+export JSON_TODO_KAFKA
+
 # Tools
 todo:
 	@echo $$JSON_TODO | bash
@@ -142,6 +146,8 @@ kat-send:
 kat-listen:
 	@kcat -t todo_created -b localhost:9092 -C
 
+kat-send-todo:
+	echo '{ "description": "string", "done": true, "dueDate": { "due": "2021-05-07", "start": "2021-05-07" }, "title": "string" }' | kcat -t todo_created -b localhost:9092 -P
 # Browser
 open-namenode:
 	open http://localhost:9870
