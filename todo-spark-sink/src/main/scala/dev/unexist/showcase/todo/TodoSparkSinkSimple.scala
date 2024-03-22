@@ -51,9 +51,8 @@ object TodoSparkSinkSimple {
     /* Write data to the console in streaming mode every minute */
     resDF.writeStream // <4>
       .format("console")
-      .outputMode("complete")
+      .outputMode("update")
       .trigger(Trigger.ProcessingTime(1, TimeUnit.MINUTES))
-      .option("path", "todo_catalog.spark.messages")
       .start()
 
     /* Reset the last terminated streaming query to avoid an immediate return */
