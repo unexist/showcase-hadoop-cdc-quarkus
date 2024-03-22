@@ -38,7 +38,6 @@ pd-pod-create:
 # 50030 = Jobtracker port
 	@podman pod create -n $(PODNAME) --network bridge \
 		-p 5432:5432 \
-		-p 7070:7070 \
 		-p 8080:8080 \
 		-p 8081:8081 \
 		-p 8090:8090 \

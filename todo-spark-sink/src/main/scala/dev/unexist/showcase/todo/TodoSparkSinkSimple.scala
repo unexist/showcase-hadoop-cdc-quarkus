@@ -51,7 +51,7 @@ object TodoSparkSinkSimple {
     /* Write data to the console in streaming mode every minute */
     resDF.writeStream // <4>
       .format("console")
-      .outputMode("update")
+      .outputMode("append")
       .trigger(Trigger.ProcessingTime(1, TimeUnit.MINUTES))
       .start()
 
