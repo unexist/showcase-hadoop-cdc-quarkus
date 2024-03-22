@@ -1,4 +1,4 @@
-FROM eclipse-temurin:8-jdk
+FROM docker.io/eclipse-temurin:8-jdk
 
 MAINTAINER Christoph Kappel <christoph@unexist.dev>
 

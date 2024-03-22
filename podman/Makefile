@@ -90,7 +90,7 @@ pd-spark:
 	@podman run -dit --name spark-single --cap-add SYS_CHROOT --pod=$(PODNAME) custom-spark:latest
 
 pd-redpanda:
-	@podman run -dit --name redpanda --pod=$(PODNAME) vectorized/redpanda
+	@podman run -dit --name redpanda --pod=$(PODNAME) docker.io/vectorized/redpanda:latest
 
 pd-quarkus:
 	@podman run -dit --name quarkus --pod=$(PODNAME) todo-service-debezium:0.1
