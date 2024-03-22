@@ -25,7 +25,7 @@ COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 WORKDIR /home/hduser
 USER hduser
 
-EXPOSE 7070 8080 8081
+EXPOSE 7077 8080 8081
 
 # WORKERSTART=0 will prevent worker from being launched
 ENV WORKERSTART=1
