@@ -4,12 +4,13 @@ MAINTAINER Christoph Kappel <christoph@unexist.dev>
 
 RUN apt-get -o Acquire::Max-FutureTime=31536000 update -y \
     && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get install -y --no-install-recommends curl \
+    && apt-get install -y --no-install-recommends doas curl multitail vim \
     && apt-get clean
 
 RUN groupadd wheel \
     && useradd -m hduser -G wheel \
-    && echo "hduser:hduser" | chpasswd
+    && echo "hduser:hduser" | chpasswd \
+    && echo "permit nopass :wheel" > /etc/doas.conf
 
 ENV SPARK_USER="hduser"
 ENV SPARK_VERSION="3.5.1"
