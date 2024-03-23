@@ -148,6 +148,9 @@ kat-listen:
 
 kat-send-todo:
 	echo '{ "description": "string", "done": true, "dueDate": { "due": "2021-05-07", "start": "2021-05-07" }, "title": "string" }' | kcat -t todo_created -b localhost:9092 -P
+
+kat-listen-todo-streamed:
+	@kcat -t todo_streamed -b localhost:9092 -C
 # Browser
 open-namenode:
 	open http://localhost:9870
