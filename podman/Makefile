@@ -54,19 +54,19 @@ pd-pod-recreate: pd-pod-rm pd-pod-create
 
 pd-iceberg-build:
 	@test ! -d "debezium-server-iceberg" && git clone https://github.com/memiiso/debezium-server-iceberg.git || echo
-	@cp iceberg/Dockerfile debezium-server-iceberg/Dockerfile
+	@cp iceberg/Containerfile debezium-server-iceberg/Containerfile
 	@cat iceberg/application.properties | sed -e "s/%%PG_USER%%/$(PG_USER)/" -e "s/%%PG_PASS%%/$(PG_PASS)/" > debezium-server-iceberg/application.properties
 
-	@podman build --format docker -t custom-debezium-iceberg -f debezium-server-iceberg/Dockerfile
+	@podman build --format docker -t custom-debezium-iceberg -f debezium-server-iceberg/Containerfile
 
 pd-postgres-build:
-	@podman build --format docker -t custom-postgres -f postgres/Dockerfile
+	@podman build --format docker -t custom-postgres -f postgres/Containerfile
 
 pd-hadoop-hive-spark-build:
-	@podman build --format docker -t custom-hadoop-hive-spark -f hadoop_hive_spark/Dockerfile
+	@podman build --format docker -t custom-hadoop-hive-spark -f hadoop_hive_spark/Containerfile
 
 pd-spark-build:
-	@podman build --format docker -t custom-spark -f spark/Dockerfile
+	@podman build --format docker -t custom-spark -f spark/Containerfile
 
 pd-quarkus-build:
 	mvn -f ../todo-service-debezium/pom.xml clean package -Dquarkus.container-image.build=true #-Dquarkus.container-image.push=true
